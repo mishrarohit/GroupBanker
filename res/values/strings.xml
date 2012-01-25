@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, GroupBankerActivity!</string>
     <string name="app_name">GroupBanker</string>
+    <string name="fblogin">Connect with Facebook</string>
 
 </resources>
