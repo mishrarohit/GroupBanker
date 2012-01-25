@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.content.SharedPreferences ;
 import com.facebook.android.*;
-import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.Facebook.*;
 import com.facebook.*;
 
 public class GroupBankerActivity extends Activity {
