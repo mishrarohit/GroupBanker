@@ -4,5 +4,6 @@
     <string name="hello">Welcome to GroupBanker!</string>
     <string name="app_name">GroupBanker</string>
     <string name="fblogin">Connect with Facebook</string>
+    <string name="fbdone">FB authentication is done. </string>
 
 </resources>

@@ -7,19 +7,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.util.Log;
 import android.view.View;
 
 public class WelcomeActivity extends Activity implements View.OnClickListener{
+	
+	// For Log tag
+	private static final String TAG = "WelcomeActivity";
 	
 	Facebook facebook = new Facebook("228939630494756");
 
 	String FILENAME = "AndroidSSO_data";
     private SharedPreferences mPrefs;
+   
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome);
+        
+        mPrefs = getPreferences(MODE_PRIVATE);
+    //    String access_token = mPrefs.getString("access_token", null);
+    //    long expires = mPrefs.getLong("access_expires", 0);
         
         /*
          * implementing OnClickListener() for Connect with Facebook button
@@ -32,16 +41,31 @@ public class WelcomeActivity extends Activity implements View.OnClickListener{
 	
 	public void onClick(View view) {
 		
+		Log.v(TAG, "fbconnect button has been clicked");
 		facebook.authorize(this, new String[] { "email", "publish_checkins" }, 
             	
         		new DialogListener() {
-            @Override
+            
+			@Override
             public void onComplete(Bundle values) {
-                SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putString("access_token", facebook.getAccessToken());
+				Log.v(TAG, "At start of onclick DialogListener onComplete");
+				
+				try 
+				{
+				SharedPreferences.Editor editor = mPrefs.edit();
+				Log.v(TAG, "Inside onclick DialogListener onComplete got editor ");
+				
+				editor.putString("access_token", facebook.getAccessToken());
                 editor.putLong("access_expires", facebook.getAccessExpires());
-                editor.commit();
+                Log.v(TAG, "Inside onclick DialogListener onComplete before editor commit ");
                 
+                editor.commit();
+			}
+				catch (Exception e)	{
+					Log.w(TAG, "The SharedPreference editor didn't work "+ Log.getStackTraceString(e));
+				}
+		
+                Log.v(TAG, "At end of onclick DialogListener onComplete");
             }
 
             @Override
@@ -60,11 +84,14 @@ public class WelcomeActivity extends Activity implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
 
         facebook.authorizeCallback(requestCode, resultCode, data);
+        Log.v(TAG, "authorizeCallBack worked");
         setContentView(R.layout.main);
+        Log.v(TAG, "main.xml set") ;
     }
     
     public void onResume() {    
         super.onResume();
         facebook.extendAccessTokenIfNeeded(this, null);
     }
+    
 }
