@@ -8,9 +8,12 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences ;
 import com.facebook.android.*;
@@ -71,8 +74,17 @@ public class GroupBankerActivity extends Activity {
         SessionStore.restore(Utility.mFacebook, this);
         SessionEvents.addAuthListener(new FbAPIsAuthListener());
         SessionEvents.addLogoutListener(new FbAPIsLogoutListener());
-
         
+        /*
+         * Source Tag: login_tag
+         */
+        mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE, Utility.mFacebook, permissions);
+
+        if (Utility.mFacebook.isSessionValid()) {
+            requestUserData();
+        }
+
+                
        /* This whole block of code is being commented in favor of the Hackbook code
         //  Get existing access_token if any
          
