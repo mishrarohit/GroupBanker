@@ -2,6 +2,7 @@ package me.rohitmishra.groupbanker;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.content.Intent;
 import android.content.SharedPreferences ;
 import com.facebook.android.*;
@@ -10,13 +11,15 @@ import com.facebook.*;
 
 public class GroupBankerActivity extends Activity {
 	
+	private static final String TAG = "GroupBankerActivity";
 	Facebook facebook = new Facebook("228939630494756");
 	String FILENAME = "AndroidSSO_data";
     private SharedPreferences mPrefs;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        Log.v(TAG, "onCreate called") ;
+    	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
         
@@ -36,6 +39,9 @@ public class GroupBankerActivity extends Activity {
         
         //  Launch the welcomeActivity if the access_token has expired.
          
+       Log.v(TAG, "fbsessionvalid= " + facebook.isSessionValid()) ;
+       Log.v(TAG, "fbaccesstoken= " + facebook.getAccessToken()) ;
+       
         if(!facebook.isSessionValid()) {
         	Intent i = new Intent(this, WelcomeActivity.class);
         	startActivity(i);

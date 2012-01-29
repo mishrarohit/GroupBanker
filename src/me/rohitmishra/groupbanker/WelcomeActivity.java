@@ -23,6 +23,7 @@ public class WelcomeActivity extends Activity implements View.OnClickListener{
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
+		Log.v(TAG, "onCreate called") ;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome);
         
@@ -85,11 +86,12 @@ public class WelcomeActivity extends Activity implements View.OnClickListener{
 
         facebook.authorizeCallback(requestCode, resultCode, data);
         Log.v(TAG, "authorizeCallBack worked");
-        setContentView(R.layout.main);
-        Log.v(TAG, "main.xml set") ;
+        setContentView(R.layout.fbdone);
+        Log.v(TAG, "fbdone.xml set") ;
     }
     
     public void onResume() {    
+    	Log.v(TAG, "onResume called") ;
         super.onResume();
         facebook.extendAccessTokenIfNeeded(this, null);
     }
