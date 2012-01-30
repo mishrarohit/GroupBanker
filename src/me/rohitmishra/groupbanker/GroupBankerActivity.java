@@ -19,6 +19,8 @@ import android.content.SharedPreferences ;
 import com.facebook.android.*;
 import com.facebook.android.R;
 import com.facebook.android.Facebook.*;
+
+
 import me.rohitmishra.groupbanker.GroupBankerActivity.FbAPIsAuthListener;
 import me.rohitmishra.groupbanker.GroupBankerActivity.FbAPIsLogoutListener;
 import me.rohitmishra.groupbanker.GroupBankerActivity.UserRequestListener;
@@ -51,6 +53,7 @@ public class GroupBankerActivity extends Activity {
     
 	String FILENAME = "AndroidSSO_data";
     private SharedPreferences mPrefs;
+    private Boolean mFriends ;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,22 +78,29 @@ public class GroupBankerActivity extends Activity {
         SessionEvents.addAuthListener(new FbAPIsAuthListener());
         SessionEvents.addLogoutListener(new FbAPIsLogoutListener());
         
+        
+        mPrefs = getPreferences(MODE_PRIVATE);
         /*
          * Source Tag: login_tag
          */
         mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE, Utility.mFacebook, permissions);
 
+        
         if (Utility.mFacebook.isSessionValid()) {
             requestUserData();
+            mFriends = mPrefs.getBoolean("friendsDownloaded", false) ;
+            if (mFriends == false){
+            	getFriends();
+            }
         }
 
                 
        /* This whole block of code is being commented in favor of the Hackbook code
         //  Get existing access_token if any
          
-        mPrefs = getPreferences(MODE_PRIVATE);
+        
         String access_token = mPrefs.getString("access_token", null);
-        long expires = mPrefs.getLong("access_expires", 0);
+        long expires = mPrefs.getLong("access_xexpires", 0);
         if(access_token != null) {
             facebook.setAccessToken(access_token);
         }
@@ -147,6 +157,29 @@ public class GroupBankerActivity extends Activity {
             }
         }
     }
+    
+    /*
+     * callback after friends are fetched via me/friends or fql query.
+     */
+    public class FriendsRequestListener extends BaseRequestListener {
+
+        @Override
+        public void onComplete(final String response, final Object state) {
+            Log.v(TAG, "We are in FriendsRequestListener onComplete. Response is " + response ) ;
+        	dialog.dismiss();
+            Intent myIntent = new Intent(getApplicationContext(), FriendsList.class);
+            myIntent.putExtra("API_RESPONSE", response);
+            // myIntent.putExtra("METHOD", graph_or_fql);
+            startActivity(myIntent);
+        }
+
+        public void onFacebookError(FacebookError error) {
+            dialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Facebook Error: " + error.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
    
     public class FQLRequestListener extends BaseRequestListener {
 
@@ -241,5 +274,16 @@ public class GroupBankerActivity extends Activity {
         Bundle params = new Bundle();
         params.putString("fields", "name, picture");
         Utility.mAsyncRunner.request("me", params, new UserRequestListener());
+    }
+    
+    public void getFriends() {
+    	dialog = ProgressDialog.show(GroupBankerActivity.this, "",
+                getString(R.string.please_wait), true, true);
+    	String query = "select name, current_location, uid, pic_square from user where uid in (select uid2 from friend where uid1=me()) order by name";
+        Bundle params = new Bundle();
+        params.putString("method", "fql.query");
+        params.putString("query", query);
+        Utility.mAsyncRunner.request(null, params,
+                new FriendsRequestListener());
     }
 }

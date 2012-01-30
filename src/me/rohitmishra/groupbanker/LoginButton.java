@@ -95,7 +95,7 @@ public class LoginButton extends ImageButton {
     private final class LoginDialogListener implements DialogListener {
         @Override
         public void onComplete(Bundle values) {
-            SessionEvents.onLoginSuccess();
+            SessionEvents.onLoginSuccess(); 
         }
 
         @Override
