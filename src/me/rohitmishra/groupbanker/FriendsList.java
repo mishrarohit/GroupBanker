@@ -28,15 +28,17 @@ public class FriendsList extends Activity  {
 
     protected ListView friendsList;
     protected static JSONArray jsonArray;
-    protected String graph_or_fql;
-
-    /*
-     * Layout the friends' list
-     */
+    
+    private long mRowId ;
+    private FriendsDbAdapter mDbHelper ;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mDbHelper = new FriendsDbAdapter(this);
+        mDbHelper.open() ;
+        
         mHandler = new Handler();
         setContentView(R.layout.fbdone);
 
@@ -46,6 +48,20 @@ public class FriendsList extends Activity  {
         try {
             jsonArray = new JSONArray(apiResponse);
             Log.v(TAG, "We have jsonArray  " +  apiResponse) ;
+            final long friendId;
+            String name ;
+            String imageURI ;
+            
+            for (int i = 0; i < jsonArray.length(); i++)	{
+            	JSONObject jsonObject = jsonArray.getJSONObject(i) ;
+            	name = jsonArray.getJSONObject(i).getString("name");
+            	
+            	
+            	// TODO Get fbid, name and imageuri of the friend and call mDbHelper.createFriend
+            	
+            	
+            	
+            }
         } catch (JSONException e) {
           // showToast("Error: " + e.getMessage());
             Log.v(TAG, "JSONException : " + e.getMessage()) ;

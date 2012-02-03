@@ -31,7 +31,7 @@ public class Utility extends Application {
     public static JSONObject mFriendsList;
     public static String userUID = null;
     public static String objectID = null;
- //   public static FriendsGetProfilePics model;
+   // public static FriendsGetProfilePics model;
     public static AndroidHttpClient httpclient = null;
     public static Hashtable<String, String> currentPermissions = new Hashtable<String, String>();
 
