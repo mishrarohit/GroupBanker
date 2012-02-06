@@ -98,7 +98,7 @@ public class FriendsDbAdapter {
     	initialValues.put(KEY_NAME, name);
     	initialValues.put(KEY_IMAGEURI, imageuri);
     	
-    	return mDb.insert(DATABASE_NAME, null, initialValues) ;
+    	return mDb.insert(TABLE_NAME, null, initialValues) ;
     }
 
 // TODO Code to updateFriend, fetchAllFriends, fetchFriend and deleteFriend

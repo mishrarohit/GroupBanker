@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -45,9 +46,9 @@ public class FriendsList extends Activity  {
         try {
             jsonArray = new JSONArray(apiResponse);
             Log.v(TAG, "We have jsonArray  " +  apiResponse) ;
-            final long friendId;
+            String friendId;
             String name ;
-            String imageURI ;
+            Uri imageUri ;
             
             //creating a directory in memory card to store the images
             
@@ -57,8 +58,8 @@ public class FriendsList extends Activity  {
             // have the object build the directory structure, if needed.
             GroupBankerFriends.mkdirs();
             
-            
-            for (int i = 0; i < jsonArray.length(); i++)	{
+            //changing the upper limit of the for loop to 5 in order to test the code. original:jsonArray.length()
+            for (int i = 0; i < 5; i++)	{
             	
             	JSONObject jsonObject = jsonArray.getJSONObject(i) ;
             	name = jsonArray.getJSONObject(i).getString("name");
@@ -109,12 +110,27 @@ public class FriendsList extends Activity  {
 					}
             	}
             	
+            //getting the uri for the image just stored in sdcard
             	
-            	// TODO Get fbid, name and imageuri of the friend and call mDbHelper.createFriend
+            	String filename = name;
+            	String path = "/mnt/sdcard/GroupBankerFriends" + filename;
+            	File f = new File(path);  
+            	 
+           //uri from the file
+                imageUri = Uri.fromFile(f);
+            	Log.v(TAG, "URI of the image is:  " +  imageUri) ;
             	
+           //converting the uri to string in order to store it in a database
+            	String stringUri = imageUri.toString();
             	
+           //getting fbid for the friend
+            	friendId = jsonArray.getJSONObject(i).getString("uid");
             	
-            }
+           //storing the friend to the SQLite database using FriendsDbAdapter
+            	mDbHelper.createFriend(friendId, name, stringUri);
+            	 Log.v(TAG, "createFriend called and friend created") ;	
+            	
+           }
         } catch (JSONException e) {
           // showToast("Error: " + e.getMessage());
             Log.v(TAG, "JSONException : " + e.getMessage()) ;
