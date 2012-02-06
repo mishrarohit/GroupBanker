@@ -68,4 +68,10 @@ public class FriendsList extends Activity  {
         	return;
         }
     }
+    
+    @Override
+    protected void onPause()	{
+    	super.onPause();
+    	mDbHelper.close();
+    }
 }

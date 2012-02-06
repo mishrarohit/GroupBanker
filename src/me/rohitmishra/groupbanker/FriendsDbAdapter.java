@@ -1,8 +1,5 @@
 package me.rohitmishra.groupbanker;
 
-import com.android.demo.notepad3.NotesDbAdapter;
-import com.android.demo.notepad3.NotesDbAdapter.DatabaseHelper;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;

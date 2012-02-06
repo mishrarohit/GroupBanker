@@ -67,7 +67,11 @@ public class GroupBankerActivity extends Activity {
         mUserPic = (ImageView) GroupBankerActivity.this.findViewById(R.id.user_pic);
         
      // Create the Facebook Object using the app id.
+        
         Utility.mFacebook = new Facebook(APP_ID);
+        
+        Log.v(TAG, "mFacebook = " + Utility.mFacebook) ; 
+        
         // Instantiate the asynrunner object for asynchronous api calls.
         Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
 
@@ -87,58 +91,26 @@ public class GroupBankerActivity extends Activity {
 
         
         if (Utility.mFacebook.isSessionValid()) {
+        	Log.v(TAG, "onCreate - isSessionValid = true");
             requestUserData();
             mFriends = mPrefs.getBoolean("friendsDownloaded", false) ;
+            Log.v(TAG, "mFriends = " + mFriends);
             if (mFriends == false){
             	getFriends();
             }
         }
-
-                
-       /* This whole block of code is being commented in favor of the Hackbook code
-        //  Get existing access_token if any
-         
-        
-        String access_token = mPrefs.getString("access_token", null);
-        long expires = mPrefs.getLong("access_xexpires", 0);
-        if(access_token != null) {
-            facebook.setAccessToken(access_token);
-        }
-        
-        mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE, Utility.mFacebook, permissions);
-
-        if (Utility.mFacebook.isSessionValid()) {
-            requestUserData();
-        }
-        
-        
-        if(expires != 0) {
-            facebook.setAccessExpires(expires);
-        }
-        
-        
-        //  Launch the welcomeActivity if the access_token has expired.
-         
-       Log.v(TAG, "fbsessionvalid= " + facebook.isSessionValid()) ;
-       Log.v(TAG, "fbaccesstoken= " + facebook.getAccessToken()) ;
-       
-        if(!facebook.isSessionValid()) {
-        	Intent i = new Intent(this, WelcomeActivity.class);
-        	startActivity(i);
-         }
-         
-         */
-        
-    }		// End of onCreate 
+    }
     
     @Override
     public void onResume() {
         super.onResume();
         if(Utility.mFacebook != null) {
             if (!Utility.mFacebook.isSessionValid()) {
-                mText.setText("You are logged out! ");
+                Log.v(TAG, "In onResume - isSessionValid is false") ;
+            	mText.setText("You are logged out! ");
                 mUserPic.setImageBitmap(null);
             } else {
+            	Log.v(TAG, "in onResume -- else part - isSessionValid is true");
                 Utility.mFacebook.extendAccessTokenIfNeeded(this, null);
             }
         }
@@ -240,7 +212,12 @@ public class GroupBankerActivity extends Activity {
 
         @Override
         public void onAuthSucceed() {
-            requestUserData();
+            Log.v(TAG, "in FbAPIsAuthListener - onAuthSucced - true - calling getFriends") ;
+        	//requestUserData();
+            if (mFriends == false){
+            	getFriends();
+            }
+            
         }
 
         @Override
@@ -270,6 +247,7 @@ public class GroupBankerActivity extends Activity {
      * Request user name, and picture to show on the main screen.
      */
     public void requestUserData() {
+    	Log.v(TAG, "requestUserData called") ;
         mText.setText("Fetching user name, profile pic...");
         Bundle params = new Bundle();
         params.putString("fields", "name, picture");
@@ -277,6 +255,7 @@ public class GroupBankerActivity extends Activity {
     }
     
     public void getFriends() {
+    	Log.v(TAG, "getFriends called") ;
     	dialog = ProgressDialog.show(GroupBankerActivity.this, "",
                 getString(R.string.please_wait), true, true);
     	String query = "select name, current_location, uid, pic_square from user where uid in (select uid2 from friend where uid1=me()) order by name";
