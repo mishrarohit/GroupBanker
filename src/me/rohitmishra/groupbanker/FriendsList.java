@@ -1,25 +1,22 @@
 package me.rohitmishra.groupbanker;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class FriendsList extends Activity  {
 	
@@ -52,9 +49,65 @@ public class FriendsList extends Activity  {
             String name ;
             String imageURI ;
             
+            //creating a directory in memory card to store the images
+            
+            // create a File object for the parent directory
+            File GroupBankerFriends = new File("/sdcard/GroupBankerFriends/");
+            
+            // have the object build the directory structure, if needed.
+            GroupBankerFriends.mkdirs();
+            
+            
             for (int i = 0; i < jsonArray.length(); i++)	{
+            	
             	JSONObject jsonObject = jsonArray.getJSONObject(i) ;
             	name = jsonArray.getJSONObject(i).getString("name");
+            	final String picURL = jsonObject.getString("pic_square");
+            	Log.v(TAG, "We have url of picture  " +  picURL) ;
+            	
+            	//storing the image from the url in a folder in SD card
+            	URL url = new URL (picURL);
+            	InputStream input = url.openStream();
+            	
+            	try {
+            		
+            		// create a File object for the output file
+            		File outputFile = new File(GroupBankerFriends, name);
+            		Log.v(TAG, "outputFile created by the name  " +  name) ;
+            		
+            		// now attach the OutputStream to the file object, instead of a String representation
+            		FileOutputStream fos = new FileOutputStream(outputFile);
+            		
+            	    try {
+            	        byte[] buffer = new byte[1000];
+            	        int bytesRead = 0;
+            	        while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
+            	            fos.write(buffer, 0, buffer.length);
+            	        }            	        
+            	        Log.v(TAG, "the image buffer for output file written:  " +  buffer) ;
+            	        
+            	    } catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} finally {
+            	        try {
+							fos.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+            	    }
+            	} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+            	    try {
+						input.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+            	}
             	
             	
             	// TODO Get fbid, name and imageuri of the friend and call mDbHelper.createFriend
@@ -66,7 +119,13 @@ public class FriendsList extends Activity  {
           // showToast("Error: " + e.getMessage());
             Log.v(TAG, "JSONException : " + e.getMessage()) ;
         	return;
-        }
+        } catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     @Override
