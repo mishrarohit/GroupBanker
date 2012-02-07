@@ -51,7 +51,7 @@ public class GroupBankerActivity extends Activity {
     "photo_upload" };
     final static int AUTHORIZE_ACTIVITY_RESULT_CODE = 0;
     
-	String FILENAME = "AndroidSSO_data";
+	String FILENAME = "GroupBanker_Preferences";
     private SharedPreferences mPrefs;
     private Boolean mFriends ;
     
@@ -59,14 +59,10 @@ public class GroupBankerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         Log.v(TAG, "onCreate called") ;
     	super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
         
-        mHandler = new Handler() ;
-        
-        mText = (TextView) GroupBankerActivity.this.findViewById(R.id.txt);
-        mUserPic = (ImageView) GroupBankerActivity.this.findViewById(R.id.user_pic);
-        
-     // Create the Facebook Object using the app id.
+    	mHandler = new Handler() ;
+    	
+    	// Create the Facebook Object using the app id.
         
         Utility.mFacebook = new Facebook(APP_ID);
         
@@ -75,7 +71,7 @@ public class GroupBankerActivity extends Activity {
         // Instantiate the asynrunner object for asynchronous api calls.
         Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
 
-        mLoginButton = (LoginButton) findViewById(R.id.login);
+        
         
      // restore session if one exists
         SessionStore.restore(Utility.mFacebook, this);
@@ -84,20 +80,33 @@ public class GroupBankerActivity extends Activity {
         
         
         mPrefs = getPreferences(MODE_PRIVATE);
-        /*
-         * Source Tag: login_tag
-         */
-        mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE, Utility.mFacebook, permissions);
 
-        
         if (Utility.mFacebook.isSessionValid()) {
         	Log.v(TAG, "onCreate - isSessionValid = true");
-            requestUserData();
+           // requestUserData();
             mFriends = mPrefs.getBoolean("friendsDownloaded", false) ;
             Log.v(TAG, "mFriends = " + mFriends);
             if (mFriends == false){
+            	Log.v(TAG, "in onCreate. mFriends is false. Calling getFrieds") ;
             	getFriends();
             }
+            else	{
+            	Log.v(TAG, "onCreate - mFriends - true. Launching Home") ;
+            	Intent homeIntent = new Intent(getApplicationContext(), Home.class);
+                startActivity(homeIntent);
+            }
+        }
+        else {
+        
+	    	setContentView(R.layout.main);
+	    	mLoginButton = (LoginButton) findViewById(R.id.login);
+	        mText = (TextView) GroupBankerActivity.this.findViewById(R.id.txt);
+	        mUserPic = (ImageView) GroupBankerActivity.this.findViewById(R.id.user_pic);
+	        
+	        /*
+	         * Source Tag: login_tag
+	         */
+	        mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE, Utility.mFacebook, permissions);
         }
     }
     
