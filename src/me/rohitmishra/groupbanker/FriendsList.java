@@ -16,79 +16,121 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 public class FriendsList extends Activity  {
 	
 	private static final String TAG = "FriendsList";
-    private Handler mHandler;
 
     protected ListView friendsList;
     protected static JSONArray jsonArray;
     
-    private long mRowId ;
     private FriendsDbAdapter mDbHelper ;
     
     String FILENAME = "GroupBanker_Preferences";
     private SharedPreferences mPrefs;
-    private Boolean mFriends ;
+    
+    protected ProgressBar mProgressBar ;
+    
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // int counter = 0 ;
+        
+     // Calling Indeterminate Progress bar 
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS) ;
+        
+        setContentView(R.layout.fbprogress);
+        
+        mProgressBar = (ProgressBar) findViewById(R.id.pbFriends) ;
         
         mPrefs = getPreferences(MODE_PRIVATE);
         
         mDbHelper = new FriendsDbAdapter(this);
         mDbHelper.open() ;
         
-        mHandler = new Handler();
-        setContentView(R.layout.fbprogress);
-
         Bundle extras = getIntent().getExtras();
         String apiResponse = extras.getString("API_RESPONSE");
         
-      //creating a directory in memory card to store the images
-        
-        // create a File object for the parent directory
-        File GroupBankerFriends = new File("/sdcard/GroupBankerFriends/");
-        
-        // have the object build the directory structure, if needed.
-        GroupBankerFriends.mkdirs();
-        
-        try {
-            jsonArray = new JSONArray(apiResponse);
-            Log.v(TAG, "We have jsonArray  " +  apiResponse) ;
-            String friendId;
-            String name ;
-            String stringUri ;
-           
-            //changing the upper limit of the for loop to 5 in order to test the code. original:jsonArray.length()
-            for (int i = 0; i < 20; i++)	{
-            	
-            	JSONObject jsonObject = jsonArray.getJSONObject(i) ;
-            	name = jsonArray.getJSONObject(i).getString("name");
-            	final String picURL = jsonObject.getString("pic_square");
-            	Log.v(TAG, "We have url of picture  " +  picURL) ;
-            	
-            	// get StringURI from picURL 
-            	stringUri = getUriFromURL(picURL, GroupBankerFriends, name) ;
-            	
-	           //getting fbid for the friend
-	            friendId = jsonArray.getJSONObject(i).getString("uid");
+        GetFriends mGetFriends = new GetFriends() ;
+        mGetFriends.execute(apiResponse) ;
+                
+    }
+    
+    
+    
+    protected class GetFriends extends AsyncTask<String, Integer, Integer>	{
+
+		@Override
+		protected void onPreExecute()	{
+	    	super.onPreExecute() ;
+			FriendsList.this.setProgressBarIndeterminateVisibility(true) ;
+	    }
+    	
+    	@Override
+		protected Integer doInBackground(String... apiResponse) {
+			
+			//creating a directory in memory card to store the images
+	        
+	        // create a File object for the parent directory
+	        File GroupBankerFriends = new File("/sdcard/GroupBankerFriends/");
+	        
+	        // have the object build the directory structure, if needed.
+	        GroupBankerFriends.mkdirs();
+	        
+	        try {
+	            jsonArray = new JSONArray(apiResponse[0]);
+	            Log.v(TAG, "We have jsonArray  " +  apiResponse) ;
+	            String friendId;
+	            String name ;
+	            String stringUri ;
+
+	            mProgressBar.setMax(jsonArray.length());
+	            
+	            //changing the upper limit of the for loop to 5 in order to test the code. original:jsonArray.length()
+	            for (int i = 0; i < 20; i++)	{
 	            	
-	           //storing the friend to the SQLite database using FriendsDbAdapter
-	            mDbHelper.createFriend(friendId, name, stringUri);
-	            Log.v(TAG, "createFriend called and friend created") ;	
-            	
-           }
-            
-           // Set the mFriends shared preference
+	            	JSONObject jsonObject = jsonArray.getJSONObject(i) ;
+	            	name = jsonArray.getJSONObject(i).getString("name");
+	            	final String picURL = jsonObject.getString("pic_square");
+	            	Log.v(TAG, "We have url of picture  " +  picURL) ;
+	            	
+	            	// get StringURI from picURL 
+	            	stringUri = getUriFromURL(picURL, GroupBankerFriends, name) ;
+	            	
+		           //getting fbid for the friend
+		            friendId = jsonArray.getJSONObject(i).getString("uid");
+		            	
+		           //storing the friend to the SQLite database using FriendsDbAdapter
+		            mDbHelper.createFriend(friendId, name, stringUri);
+		            Log.v(TAG, "createFriend called and friend created. i = " + i) ;	
+	            	
+		            publishProgress(i) ;
+	           }
+	       } catch (JSONException e) {
+	          // showToast("Error: " + e.getMessage());
+	            Log.v(TAG, "JSONException : " + e.getMessage()) ;
+	        	return 0;
+	        }
+			
+			return 1;
+		}
+    	
+    	protected void onProgressUpdate(Integer... progress)	{
+    		super.onProgressUpdate(progress[0]);
+    		mProgressBar.setProgress(progress[0]);
+    	}
+    
+    	protected void onPostExecute(Integer result)	{
+    		Log.v(TAG, "GetFriends onPostExecute");
+        	FriendsList.this.setProgressBarIndeterminateVisibility(false);
+        	// Set the mFriends shared preference
             SharedPreferences.Editor editor = mPrefs.edit();
             editor.putBoolean("friendsDownloaded", true);
             editor.commit();
@@ -99,14 +141,13 @@ public class FriendsList extends Activity  {
             Intent homeIntent = new Intent(getApplicationContext(), Home.class) ;
             startActivity(homeIntent) ;
             
-        } catch (JSONException e) {
-          // showToast("Error: " + e.getMessage());
-            Log.v(TAG, "JSONException : " + e.getMessage()) ;
-        	return;
-        } 
+        }
+    	
     }
     
-    private String getUriFromURL(String picURL, File GroupBankerFriends, String name)	{
+    
+    
+    protected String getUriFromURL(String picURL, File GroupBankerFriends, String name)	{
     	//storing the image from the url in a folder in SD card
     	URL url = null;
 		try {

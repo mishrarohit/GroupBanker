@@ -8,5 +8,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/fbprogress" />
-
+    
+    <ProgressBar 
+        android:id="@+id/pbFriends"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+     />
+        
 </LinearLayout>
