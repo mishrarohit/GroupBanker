@@ -50,8 +50,7 @@ public class GroupBankerActivity extends Activity {
     String[] permissions = { "offline_access", "publish_stream", "user_photos", "publish_checkins",
     "photo_upload" };
     final static int AUTHORIZE_ACTIVITY_RESULT_CODE = 0;
-    
-	String FILENAME = "GroupBanker_Preferences";
+   
     private SharedPreferences mPrefs;
     private Boolean mFriends ;
     
@@ -79,7 +78,7 @@ public class GroupBankerActivity extends Activity {
         SessionEvents.addLogoutListener(new FbAPIsLogoutListener());
         
         
-        mPrefs = getPreferences(MODE_PRIVATE);
+        mPrefs = getSharedPreferences(Constants.preferences, 0);
 
         if (Utility.mFacebook.isSessionValid()) {
         	Log.v(TAG, "onCreate - isSessionValid = true");

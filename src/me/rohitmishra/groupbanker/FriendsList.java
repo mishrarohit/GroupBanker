@@ -50,7 +50,7 @@ public class FriendsList extends Activity  {
         
         mProgressBar = (ProgressBar) findViewById(R.id.pbFriends) ;
         
-        mPrefs = getPreferences(MODE_PRIVATE);
+        mPrefs = getSharedPreferences(Constants.preferences, 0);
         
         mDbHelper = new FriendsDbAdapter(this);
         mDbHelper.open() ;
