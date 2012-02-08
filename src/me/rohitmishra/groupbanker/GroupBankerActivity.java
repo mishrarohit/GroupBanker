@@ -79,12 +79,13 @@ public class GroupBankerActivity extends Activity {
         
         
         mPrefs = getSharedPreferences(Constants.preferences, 0);
-
+        mFriends = mPrefs.getBoolean("friendsDownloaded", false) ;
+        Log.v(TAG, "mFriends = " + mFriends);
+        
         if (Utility.mFacebook.isSessionValid()) {
         	Log.v(TAG, "onCreate - isSessionValid = true");
            // requestUserData();
-            mFriends = mPrefs.getBoolean("friendsDownloaded", false) ;
-            Log.v(TAG, "mFriends = " + mFriends);
+            
             if (mFriends == false){
             	Log.v(TAG, "in onCreate. mFriends is false. Calling getFrieds") ;
             	getFriends();
