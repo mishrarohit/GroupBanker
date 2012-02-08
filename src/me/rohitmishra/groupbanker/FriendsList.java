@@ -91,7 +91,8 @@ public class FriendsList extends Activity  {
 	            String name ;
 	            String stringUri ;
 
-	            mProgressBar.setMax(jsonArray.length());
+	            //changing the max limit to 20. later change it to jsonArray.length()
+	            mProgressBar.setMax(20);
 	            
 	            //changing the upper limit of the for loop to 5 in order to test the code. original:jsonArray.length()
 	            for (int i = 0; i < 20; i++)	{
