@@ -7,9 +7,6 @@ import android.widget.TextView;
 public class AddTransactionActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TextView textview = new TextView(this);
-        textview.setText("This is the Add Transaction tab");
-        setContentView(textview);
+        setContentView(R.layout.addtransaction);
     }
 }
