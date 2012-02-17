@@ -44,6 +44,10 @@ public class Home extends TabActivity	{
 	                      res.getDrawable(R.drawable.ic_tab_artists))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
+	    
+	    
+	    // To set add transaction as default tab 
+	    tabHost.setCurrentTab(1) ;
 		
 	    
 		
