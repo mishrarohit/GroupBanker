@@ -26,4 +26,5 @@
     <string name="description_hint">What did you spend money on</string>
     <string name="add_transaction_title">Add a new transaction</string>
     <string name="amount_hint">Total amount of transaction</string>
+    <string name="add_friends">Add friends</string>
 </resources>
