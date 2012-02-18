@@ -17,7 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences ;
 import com.facebook.android.*;
-import com.facebook.android.R;
+// import com.facebook.android.R;
 import com.facebook.android.Facebook.*;
 
 
