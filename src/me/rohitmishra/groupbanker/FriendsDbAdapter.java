@@ -2,6 +2,7 @@ package me.rohitmishra.groupbanker;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -102,6 +103,18 @@ public class FriendsDbAdapter {
     }
 
 // TODO Code to updateFriend, fetchAllFriends, fetchFriend and deleteFriend
+    
+    /**
+     * Implementing fetchAllFriends()
+     * Return a Cursor over the list of all friends (their names) in the database
+     * 
+     * @return Cursor over all friends' names
+     */
+    
+    public Cursor fetchAllFriends() {
+    	
+    	return mDb.query(TABLE_NAME,new String[] {KEY_FBID, KEY_NAME, KEY_IMAGEURI}, null, null, null, null, null);
+    }
 }
 	
 	
