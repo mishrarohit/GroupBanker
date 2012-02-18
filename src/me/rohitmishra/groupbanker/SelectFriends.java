@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 public class SelectFriends extends ListActivity{
@@ -27,15 +28,20 @@ public class SelectFriends extends ListActivity{
 	      Log.v(TAG, "fetchAllFriends Over") ;
 	      
 	      String[] from = new String[] {mDbHelper.KEY_NAME};
-	      int[] to = new int[] { R.id.text1 };
+	      int[] to = new int[] { android.R.id.text1 };
 	      
 	   // Now create an  adapter and set it to display using our row
 	        SimpleCursorAdapter friends =
-	            new SimpleCursorAdapter(this, R.layout.list_item, c, from, to);
+	            new SimpleCursorAdapter(this, android.R.layout.simple_list_item_multiple_choice, c, from, to);
 	        setListAdapter(friends);
+ 	        
+            final ListView listView = getListView();
+	        
+	        listView.setItemsCanFocus(false);
+	        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	        
 	        mDbHelper.close();
 	        
-
+	        
 }
 }
