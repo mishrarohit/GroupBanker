@@ -111,9 +111,9 @@ public class FriendsDbAdapter {
      * @return Cursor over all friends' names
      */
     
-    public Cursor fetchAllFriends() {
+    public Cursor fetchAllFriends() throws SQLException {
     	
-    	return mDb.query(TABLE_NAME,new String[] {KEY_FBID, KEY_NAME, KEY_IMAGEURI}, null, null, null, null, null);
+    	return mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, null, null, null, null, null);
     }
 }
 	

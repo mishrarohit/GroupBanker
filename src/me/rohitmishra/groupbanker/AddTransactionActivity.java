@@ -23,7 +23,7 @@ public class AddTransactionActivity extends Activity implements View.OnClickList
 	@Override
 	public void onClick(View view) {
 		
-		Intent selectIntent = new Intent(getApplicationContext(), selectFriends.class);
+		Intent selectIntent = new Intent(getApplicationContext(), SelectFriends.class);
         startActivityForResult(selectIntent, 0);
 	}
 
