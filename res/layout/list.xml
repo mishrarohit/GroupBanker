@@ -24,7 +24,15 @@
 	   </Button>
 	</RelativeLayout>
         
-      <ListView
+	<EditText
+	    android:id="@+id/filtertext"
+	    android:hint="@string/search"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" >
+	</EditText>
+    
+    
+    <ListView
         android:id="@+android:id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

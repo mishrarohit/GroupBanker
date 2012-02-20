@@ -1,5 +1,6 @@
 package me.rohitmishra.groupbanker;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,7 +29,7 @@ public class FriendsDbAdapter {
 		"fbid text not null, name text not null, imageuri text not null);" ;
 	
 	private static final String DATABASE_NAME = "groupbanker" ;
-	private static final String TABLE_NAME = "friends" ;
+	private static final String TABLE_NAME = "friends" ; 
 	private static final int DATABASE_VERSION = 1 ;
 	
 	private final Context mCtx ;
@@ -61,6 +62,7 @@ public class FriendsDbAdapter {
      */
     public FriendsDbAdapter(Context ctx) {
         this.mCtx = ctx;
+        
     }
     
     /**
@@ -102,7 +104,7 @@ public class FriendsDbAdapter {
     	return mDb.insert(TABLE_NAME, null, initialValues) ;
     }
 
-// TODO Code to updateFriend, fetchAllFriends, fetchFriend and deleteFriend
+// TODO Code to updateFriend, fetchFriend and deleteFriend
     
     /**
      * Implementing fetchAllFriends()
@@ -114,7 +116,14 @@ public class FriendsDbAdapter {
     public Cursor fetchAllFriends() throws SQLException {
     	
     	return mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, null, null, null, null, null);
+    	
     }
+    
+    public Cursor fetchFriendsWithSelection(String constraint) throws SQLException	{
+    	String selection = KEY_NAME + " LIKE '%"+constraint+"%'";
+    	return mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, selection, null, null, null, null);
+    }
+   
 }
 	
 	
