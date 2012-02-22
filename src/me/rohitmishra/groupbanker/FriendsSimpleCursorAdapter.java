@@ -7,18 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.Filterable;
 import android.widget.SimpleCursorAdapter;
 
 /* Using the tutorial at 
  * http://www.vogella.de/articles/AndroidListView/article.html
  * for creating a custom SimpleCursorAdapter for SelectFriends.java
  */
-public class FriendsSimpleCursorAdapter extends SimpleCursorAdapter {
+public class FriendsSimpleCursorAdapter extends SimpleCursorAdapter implements Filterable {
 
 	private static final String TAG = "FriendsSimpleCursorAdapter";
 	private final Context context ;
 	private final String[] values ;
 	private final int layout ;
+	private final Cursor cursor ;
 	
 	static class ViewHolder	{
 		public CheckedTextView checkedText ;
@@ -30,6 +32,7 @@ public class FriendsSimpleCursorAdapter extends SimpleCursorAdapter {
 		this.context = context ;
 		this.values = from ;
 		this.layout = layout ;
+		this.cursor = c ;
 		Log.d(TAG, "At the end of the constructor") ;
 	}
 	
@@ -41,7 +44,7 @@ public class FriendsSimpleCursorAdapter extends SimpleCursorAdapter {
 			Log.d(TAG, "rowView = null");
 			try {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			rowView = inflater.inflate(layout, parent);
+			rowView = inflater.inflate(layout, parent, false);
 			Log.d(TAG, "rowView inflated. rowView = " + rowView);
 			ViewHolder viewHolder = new ViewHolder() ;
 			viewHolder.checkedText = (CheckedTextView) rowView.findViewById(R.id.text1) ;
@@ -54,8 +57,9 @@ public class FriendsSimpleCursorAdapter extends SimpleCursorAdapter {
 		
 		ViewHolder holder = (ViewHolder) rowView.getTag();
 		
-		String s = values[position];
-		holder.checkedText.setText(s);
+		int nameCol = cursor.getColumnIndex(FriendsDbAdapter.KEY_NAME) ;
+		String name = cursor.getString(nameCol);
+		holder.checkedText.setText(name);
 		
 		Log.d(TAG, "At the end of rowView");
 		return rowView;
