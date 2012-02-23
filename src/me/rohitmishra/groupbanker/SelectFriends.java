@@ -3,7 +3,7 @@ package me.rohitmishra.groupbanker;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import me.rohitmishra.groupbanker.SelectFriends.FriendsAdapter.ViewHolder;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,13 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
-import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -125,8 +122,9 @@ public class SelectFriends extends ListActivity{
 		@Override	
 		protected void onListItemClick(ListView parent, View v, int position, long id) {
 
-			String item = (String) getListAdapter().getItem(position);
-			Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
+			//String item = (String) getListAdapter().getItem(position); => changing it to text view
+			//CheckedTextView item = (CheckedTextView)getListAdapter().getItem(position);
+			//Toast.makeText(this, item.getText() + " selected", Toast.LENGTH_LONG).show();
 			
 			//gets the Bookmark ID of selected position
              Cursor cursor = (Cursor)parent.getItemAtPosition(position);
