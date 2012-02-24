@@ -17,7 +17,7 @@ import android.widget.SimpleCursorAdapter;
  */
 public class SelectFriendsAdapter extends SimpleCursorAdapter {
 
-	private static final String TAG = "FriendsAdapter";
+	private static final String TAG = "SelectFriendsAdapter";
 	private final Context context ;
 	private final String[] values ;
 	private final int[] to ;
@@ -41,58 +41,6 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 		Log.d(TAG, "At the end of the constructor") ;
 	}
 	
-	 
-	/*
-	@Override
-   public View newView(Context context, Cursor cursor, ViewGroup parent) {
-       final View view=mInflater.inflate(layout,parent,false); 
-       return view;
-   }
-	
-	
-	@Override
-	public void bindView(View view, Context context, Cursor cursor)	{
-		super.bindView(view, context, cursor);
-		
-		Log.d(TAG, "At the start of bindView." ) ;
-		ViewHolder holder = (ViewHolder) view.getTag();
-		if(holder == null)	{
-			Log.d(TAG, "holder = null");
-			holder = new ViewHolder();
-			
-			holder.checkedText = (CheckedTextView) view.findViewById(R.id.text1) ;
-			view.setTag(holder);
-			
-		}
-		
-		holder.checkedText.setText(cursor.getString(to[0]));
-		
-		
-		// fill the checkedStates array with amount of bookmarks (prevent OutOfBounds Force close)
-      if (cursor.moveToFirst()) {
-          while (!cursor.isAfterLast()) {  
-              SelectFriends.checkedStates.add(false);
-              cursor.moveToNext();
-          }
-      }
-      
-      String bookmarkID = cursor.getString(0);
-      //CheckedTextView markedItem = (CheckedTextView) row.findViewById(R.id.btitle);
-      if (SelectFriends.selectedIds.contains(new String(bookmarkID))) {
-          holder.checkedText.setChecked(true);
-          SelectFriends.selectedLines.add(object)
-
-      } else {
-          markedItem.setChecked(false);
-          MainActivity.selectedLines.remove(pos);
-      }
-		
-		Log.d(TAG, "At the end of rowView");
-		return ;
-		
-	}
-	*/
-	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)   {
 	    super.getView(position, convertView, parent);
@@ -102,7 +50,6 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 	    if(rowView == null) {
 	        Log.d(TAG, "rowView = null");
 	        try {
-	        //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	        rowView = mInflater.inflate(layout, parent, false);
 	        Log.d(TAG, "rowView inflated. rowView = " + rowView);
 	        ViewHolder viewHolder = new ViewHolder() ;
@@ -120,20 +67,26 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 	    Log.d(TAG, "getView cursor has " + cursor.getCount() + " rows. " +
 	    		"Cursor's current position is " + cursor.getPosition());
 	    
-	    // fill the checkedStates array with amount of bookmarks (prevent OutOfBounds Force close)
+	   
+	    
 	    try {
+	    	cursor.moveToFirst() ;
+	    } catch (Exception e)
+	    {
+	    	Log.e(TAG, "exception in try block on moveToFirst = " + e);
+	    }
+	    
+	    // fill the checkedStates array with amount of bookmarks (prevent OutOfBounds Force close)
+	    
 	    if (cursor.moveToFirst()) {
 	    	Log.d(TAG, "moveToFirst worked");
           while (!cursor.isAfterLast()) { 
-          	Log.d(TAG, "Inside the checkSates loop. cursor position is " + cursor.getPosition());
               SelectFriends.checkedStates.add(false);
               cursor.moveToNext();
           }
       }
-	    } catch (Exception e)
-	    {
-	    	Log.e(TAG, "exception in try block on 309 = " + e);
-	    }
+	    
+	    
 	 
       cursor.moveToPosition(position);
       Log.d(TAG, "Cursor position = " + cursor.getPosition());
@@ -141,7 +94,7 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
       String bookmarkID = cursor.getString(cursor.getColumnIndex(FriendsDbAdapter.KEY_ROWID));
       Log.d(TAG, "bookmarkID = " + bookmarkID );
       
-      //CheckedTextView markedItem = (CheckedTextView) row.findViewById(R.id.btitle);
+      
       if (SelectFriends.selectedIds.contains(new String(bookmarkID))) {
           holder.checkedText.setChecked(true);
           SelectFriends.selectedLines.add(position);
