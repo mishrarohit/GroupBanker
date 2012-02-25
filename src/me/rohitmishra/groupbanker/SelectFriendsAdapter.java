@@ -22,8 +22,9 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 	private final String[] values ;
 	private final int[] to ;
 	private final int layout ;
-	private final Cursor cursor ;
+	private Cursor cursor ;
 	private final LayoutInflater mInflater ;
+	private FriendsDbAdapter mDbHelper;
 
 	static class ViewHolder	{
 		public CheckedTextView checkedText ;
@@ -46,7 +47,13 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 	    super.getView(position, convertView, parent);
 	    Log.d(TAG, "In the getView method of FriendsAdapter");
 		Log.d(TAG, "position = " + position) ;
-	    View rowView = convertView ;
+
+		mDbHelper = new FriendsDbAdapter(context) ;
+		mDbHelper.open();
+		cursor = mDbHelper.fetchAllFriends();
+		
+		
+		View rowView = convertView ;
 	    if(rowView == null) {
 	        Log.d(TAG, "rowView = null");
 	        try {
