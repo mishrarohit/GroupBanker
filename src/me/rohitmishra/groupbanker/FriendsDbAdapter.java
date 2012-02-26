@@ -120,12 +120,18 @@ public class FriendsDbAdapter {
     }
     
     public Cursor fetchFriendsWithSelection(String constraint) throws SQLException	{
+    	try {
     	Log.d(TAG, "fetchFriendsWithSelection called. constraint = " + constraint + 
     			" mDb = " + mDb );
     	String selection = KEY_NAME + " LIKE '%"+constraint+"%'";
     	Cursor c =  mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, selection, null, null, null, null);
-    	Log.d(TAG, "Cursor = " + c + " has " + c.getCount()) ;
+    	Log.d(TAG, "fetchFriendsWithSelection Cursor = " + c + " has " + c.getCount()) ;
     	return c ;
+    	} catch ( Exception e)	{
+    		Log.e(TAG, "fetchFriendsWithSelection exception " + e);
+    		Cursor c = null ;
+    		return c ;
+    	}
     }
    
 }

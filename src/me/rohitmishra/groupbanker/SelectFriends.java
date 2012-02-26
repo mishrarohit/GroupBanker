@@ -64,7 +64,7 @@ public class SelectFriends extends ListActivity{
 	      Log.v(TAG, "database opened") ;
 	      
 	      c = mDbHelper.fetchAllFriends();
-	      startManagingCursor(c);
+	     // startManagingCursor(c);
 	      
 	      Log.v(TAG, "fetchAllFriends Over") ;
 	     
@@ -90,7 +90,7 @@ public class SelectFriends extends ListActivity{
 	     * that match the specified input.
 		 *	Code adapted from http://stackoverflow.com/questions/2002607/android-how-to-text-filter-a-listview-based-on-a-simplecursoradapter
 		 */
-		        
+		/*        
 	       adapter.setFilterQueryProvider(new FilterQueryProvider() {
 	    	   	public Cursor runQuery(CharSequence constraint) {
 	    	   		
@@ -106,9 +106,15 @@ public class SelectFriends extends ListActivity{
 	    	   		Cursor cur = mDbHelper.fetchFriendsWithSelection(
                     (constraint != null ? constraint.toString() : null));
 	    	   		
-	    	   		Log.d(TAG, "runQuery cursor is " + c + " has " + cur.getCount() + " rows");
+	    	   		Log.d(TAG, "runQuery cursor is " + cur + " has " + cur.getCount() + " rows  " +
+	    	   				"cursor is closed = " + cur.isClosed());
 	    	   		
-	    	   		// mDbHelper.close();
+	    	   		Cursor c1 = adapter.getCursor() ;
+	    	   		
+	    	   		Log.d(TAG, "adapter's cursor is " + c1 + " isClosed is " + c1.isClosed());
+	    	   		
+	    	   		//adapter.changeCursor(cur) ;
+	    	   		
 	    	   		return cur;
 	    	   		} catch (Exception e)	{
 	    	   			Log.e(TAG, "runQuery Exception = " + e);
@@ -118,7 +124,7 @@ public class SelectFriends extends ListActivity{
 	    	   		
          }
      });
-    
+    */
 	       setListAdapter(adapter);
         
 	       Log.d(TAG, "setListAdapter worked") ;

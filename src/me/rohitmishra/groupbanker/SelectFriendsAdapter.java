@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.FilterQueryProvider;
 import android.widget.SimpleCursorAdapter;
 
 /* Using the code at 
@@ -22,9 +23,47 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 	private final String[] values ;
 	private final int[] to ;
 	private final int layout ;
-	private Cursor cursor ;
 	private final LayoutInflater mInflater ;
 	private FriendsDbAdapter mDbHelper;
+	protected Cursor mCursor;
+	
+	protected FilterQueryProvider mFilterQueryProvider = 
+	  new FilterQueryProvider() {
+  	   	public Cursor runQuery(CharSequence constraint) {
+  	   		
+  	   		try {
+  	   		// Search for friends whose names begin with the specified letters.
+  	   		Log.v(TAG, "runQuery Constraint = " + constraint) ;
+  	   		//String selection = mDbHelper.KEY_NAME + " LIKE '%"+constraint+"%'";
+  		      
+  	   		mDbHelper = new FriendsDbAdapter(context);
+  	   		mDbHelper.open();
+  	   		
+  	   		
+  	   		Cursor cur = mDbHelper.fetchFriendsWithSelection(
+              (constraint != null ? constraint.toString() : null));
+  	   		
+  	   		Log.d(TAG, "in filterqueryprovider mCursor = " + mCursor + " isClosed = " + mCursor.isClosed() ) ;
+  	   		
+  	   		Log.d(TAG, "runQuery cursor is " + cur + " has " + cur.getCount() + " rows  " +
+  	   				"is closed = " + cur.isClosed());
+  	   		
+  	   		//Cursor c1 = adapter.getCursor() ;
+  	   		
+  	   		//Log.d(TAG, "adapter's cursor is " + c1 + " isClosed is " + c1.isClosed());
+  	   		
+  	   		//adapter.changeCursor(cur) ;
+  	   		
+  	   		return cur;
+  	   		} catch (Exception e)	{
+  	   			Log.e(TAG, "runQuery Exception = " + e);
+  	   			Cursor cur = null ;
+  	   			return cur ;
+  	   		}
+  	   		
+   }
+} ;
+
 
 	static class ViewHolder	{
 		public CheckedTextView checkedText ;
@@ -37,20 +76,39 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 		this.values = from ;
 		this.layout = layout ;
 		this.to = to ;
-		this.cursor = c ;
-		mInflater = LayoutInflater.from(context);
+		this.mCursor = c ;
+		this.mInflater = LayoutInflater.from(context);
 		Log.d(TAG, "At the end of the constructor") ;
 	}
+	
+	@Override 
+	public void changeCursor(Cursor c)	{
+		Log.d(TAG, "in changeCursor") ;
+		super.changeCursor(c) ;
+	}
+	
+	@Override
+	public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+        Log.d(TAG, "In runQueryOnBgThread") ;
+		if (mFilterQueryProvider != null) {
+			Log.d(TAG,"In runQueryOnBgThread call runQuery" );
+            return mFilterQueryProvider.runQuery(constraint);
+        }
+
+		Log.d(TAG, "mCursor = " + mCursor + " isClosed = " + mCursor.isClosed() );
+        return mCursor;
+    }	
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)   {
 	    super.getView(position, convertView, parent);
+	    Cursor mCursor = getCursor() ;
 	    Log.d(TAG, "In the getView method of FriendsAdapter");
 		Log.d(TAG, "position = " + position) ;
 
-		mDbHelper = new FriendsDbAdapter(context) ;
-		mDbHelper.open();
-		cursor = mDbHelper.fetchAllFriends();
+		//mDbHelper = new FriendsDbAdapter(context) ;
+		//mDbHelper.open();
+		//cursor = mDbHelper.fetchAllFriends();
 		
 		
 		View rowView = convertView ;
@@ -70,14 +128,14 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 
 	    ViewHolder holder = (ViewHolder) rowView.getTag();
 
-	    Log.d(TAG, "Cursor = " + cursor) ;
-	    Log.d(TAG, "getView cursor has " + cursor.getCount() + " rows. " +
-	    		"Cursor's current position is " + cursor.getPosition());
+	    Log.d(TAG, "Cursor = " + mCursor + " isClosed = " + mCursor.isClosed()) ;
+	    Log.d(TAG, "getView cursor has " + mCursor.getCount() + " rows. " +
+	    		"Cursor's current position is " + mCursor.getPosition());
 	    
 	   
 	    
 	    try {
-	    	cursor.moveToFirst() ;
+	    	mCursor.moveToFirst() ;
 	    } catch (Exception e)
 	    {
 	    	Log.e(TAG, "exception in try block on moveToFirst = " + e);
@@ -85,20 +143,20 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 	    
 	    // fill the checkedStates array with amount of bookmarks (prevent OutOfBounds Force close)
 	    
-	    if (cursor.moveToFirst()) {
+	    if (mCursor.moveToFirst()) {
 	    	Log.d(TAG, "moveToFirst worked");
-          while (!cursor.isAfterLast()) { 
+          while (!mCursor.isAfterLast()) { 
               SelectFriends.checkedStates.add(false);
-              cursor.moveToNext();
+              mCursor.moveToNext();
           }
       }
 	    
 	    
 	 
-      cursor.moveToPosition(position);
-      Log.d(TAG, "Cursor position = " + cursor.getPosition());
+      mCursor.moveToPosition(position);
+      Log.d(TAG, "Cursor position = " + mCursor.getPosition());
       
-      String bookmarkID = cursor.getString(cursor.getColumnIndex(FriendsDbAdapter.KEY_ROWID));
+      String bookmarkID = mCursor.getString(mCursor.getColumnIndex(FriendsDbAdapter.KEY_ROWID));
       Log.d(TAG, "bookmarkID = " + bookmarkID );
       
       
@@ -112,7 +170,7 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
       }
       
 	    
-      holder.checkedText.setText(cursor.getString(cursor.getColumnIndex(FriendsDbAdapter.KEY_NAME)));
+      holder.checkedText.setText(mCursor.getString(mCursor.getColumnIndex(FriendsDbAdapter.KEY_NAME)));
 
 	    Log.d(TAG, "At the end of rowView");
 	    return rowView;
