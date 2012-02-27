@@ -27,11 +27,12 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 	private FriendsDbAdapter mDbHelper;
 	protected Cursor mCursor;
 	
+	/*
 	protected FilterQueryProvider mFilterQueryProvider = 
 	  new FilterQueryProvider() {
   	   	public Cursor runQuery(CharSequence constraint) {
   	   		
-  	   		try {
+  	   		//	try {
   	   		// Search for friends whose names begin with the specified letters.
   	   		Log.v(TAG, "runQuery Constraint = " + constraint) ;
   	   		//String selection = mDbHelper.KEY_NAME + " LIKE '%"+constraint+"%'";
@@ -55,16 +56,16 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
   	   		//adapter.changeCursor(cur) ;
   	   		
   	   		return cur;
-  	   		} catch (Exception e)	{
+  	   		}  catch (Exception e)	{
   	   			Log.e(TAG, "runQuery Exception = " + e);
   	   			Cursor cur = null ;
   	   			return cur ;
-  	   		}
+  	   		} 
   	   		
    }
 } ;
 
-
+*/
 	static class ViewHolder	{
 		public CheckedTextView checkedText ;
 	}
@@ -81,68 +82,85 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
 		Log.d(TAG, "At the end of the constructor") ;
 	}
 	
+	
 	@Override 
 	public void changeCursor(Cursor c)	{
 		Log.d(TAG, "in changeCursor") ;
 		super.changeCursor(c) ;
+		SelectFriends.listView.clearChoices();
 	}
+	
 	
 	@Override
 	public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
         Log.d(TAG, "In runQueryOnBgThread") ;
-		if (mFilterQueryProvider != null) {
+		if (getFilterQueryProvider() != null) {
 			Log.d(TAG,"In runQueryOnBgThread call runQuery" );
-            return mFilterQueryProvider.runQuery(constraint);
+            return getFilterQueryProvider().runQuery(constraint);
         }
 
 		Log.d(TAG, "mCursor = " + mCursor + " isClosed = " + mCursor.isClosed() );
-        return mCursor;
+        Log.d(TAG, "in runQueryonBG else");
+        
+        Cursor cursor =  ((GroupBankerApplication) context.getApplicationContext())
+        .getFriendsDbAdapter().fetchFriendsWithSelection(constraint != null ? constraint.toString() : null);
+
+        return cursor;
+		
     }	
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)   {
 	    super.getView(position, convertView, parent);
-	    Cursor mCursor = getCursor() ;
-	    Log.d(TAG, "In the getView method of FriendsAdapter");
+	    Cursor cursor = getCursor() ;
+	    cursor.moveToPosition(position);
+	    Log.d(TAG, "Cursor position = " + cursor.getPosition());
+	      
+	    String bookmarkID = cursor.getString(cursor.getColumnIndex(FriendsDbAdapter.KEY_ROWID));
+	    Log.d(TAG, "bookmarkID = " + bookmarkID );
+	    
+	    
+	    ViewHolder viewHolder ;
+		
+	    // Log messages. 
+		Log.d(TAG, "In the getView method of FriendsAdapter");
 		Log.d(TAG, "position = " + position) ;
+		Log.d(TAG, "SelectedIds = " + SelectFriends.selectedIds) ;
+		//	Log.d(TAG, "SelectedLines = " + SelectFriends.selectedLines) ;
+		//	Log.d(TAG, "checkedStates = " + SelectFriends.checkedStates) ;
+		
 
 		//mDbHelper = new FriendsDbAdapter(context) ;
 		//mDbHelper.open();
 		//cursor = mDbHelper.fetchAllFriends();
 		
-		
+	
+	
 		View rowView = convertView ;
 	    if(rowView == null) {
 	        Log.d(TAG, "rowView = null");
 	        try {
 	        rowView = mInflater.inflate(layout, parent, false);
 	        Log.d(TAG, "rowView inflated. rowView = " + rowView);
-	        ViewHolder viewHolder = new ViewHolder() ;
+	        viewHolder = new ViewHolder() ;
 	        viewHolder.checkedText = (CheckedTextView) rowView.findViewById(R.id.text1) ;
 	        rowView.setTag(viewHolder);
-	        }
+	      }
 	        catch (Exception e) {
-	            Log.e(TAG, "exception = " + e);
-	        }
+	            Log.e(TAG, "getview rowView = null exception = " + e);
+	        } 
 	    }
 
-	    ViewHolder holder = (ViewHolder) rowView.getTag();
+	    viewHolder = (ViewHolder) rowView.getTag();
 
-	    Log.d(TAG, "Cursor = " + mCursor + " isClosed = " + mCursor.isClosed()) ;
-	    Log.d(TAG, "getView cursor has " + mCursor.getCount() + " rows. " +
-	    		"Cursor's current position is " + mCursor.getPosition());
-	    
-	   
-	    
-	    try {
-	    	mCursor.moveToFirst() ;
-	    } catch (Exception e)
-	    {
-	    	Log.e(TAG, "exception in try block on moveToFirst = " + e);
-	    }
+	    Log.d(TAG, "getView Cursor = " + cursor + " isClosed = " + cursor.isClosed()) ;
+	    Log.d(TAG, "getView cursor has " + cursor.getCount() + " rows. " +
+	    		"Cursor's current position is " + cursor.getPosition());
+	    Log.d(TAG, "start viewHolder name = " + viewHolder.checkedText.toString() + 
+	    		" isChecked = " + viewHolder.checkedText.isChecked()) ;
 	    
 	    // fill the checkedStates array with amount of bookmarks (prevent OutOfBounds Force close)
-	    
+	    /*
 	    if (mCursor.moveToFirst()) {
 	    	Log.d(TAG, "moveToFirst worked");
           while (!mCursor.isAfterLast()) { 
@@ -150,28 +168,26 @@ public class SelectFriendsAdapter extends SimpleCursorAdapter {
               mCursor.moveToNext();
           }
       }
-	    
-	    
-	 
-      mCursor.moveToPosition(position);
-      Log.d(TAG, "Cursor position = " + mCursor.getPosition());
+	     */
       
-      String bookmarkID = mCursor.getString(mCursor.getColumnIndex(FriendsDbAdapter.KEY_ROWID));
-      Log.d(TAG, "bookmarkID = " + bookmarkID );
-      
-      
-      if (SelectFriends.selectedIds.contains(new String(bookmarkID))) {
-          holder.checkedText.setChecked(true);
-          SelectFriends.selectedLines.add(position);
+	    if (SelectFriends.selectedIds.contains(new String(bookmarkID))) {
+          viewHolder.checkedText.setChecked(true);
+          SelectFriends.listView.setItemChecked(position, true) ;
+          //    SelectFriends.selectedLines.add(position);
+          Log.d(TAG, "checkedText true for bookmarkId = " + bookmarkID + " position = " + position);
 
-      } else {
-          holder.checkedText.setChecked(false);
-          SelectFriends.selectedLines.remove(position);
-      }
+	    } else {
+          viewHolder.checkedText.setChecked(false);
+          SelectFriends.listView.setItemChecked(position, false) ;
+          //    SelectFriends.selectedLines.remove(position);
+          Log.d(TAG, "checkedText false for bookmarkId = " + bookmarkID + " position = " + position);
+	    }
       
 	    
-      holder.checkedText.setText(mCursor.getString(mCursor.getColumnIndex(FriendsDbAdapter.KEY_NAME)));
+	    viewHolder.checkedText.setText(cursor.getString(cursor.getColumnIndex(FriendsDbAdapter.KEY_NAME)));
 
+	    Log.d(TAG, "end viewHolder name = " + viewHolder.checkedText.toString() + 
+	    		" isChecked = " + viewHolder.checkedText.isChecked()) ;
 	    Log.d(TAG, "At the end of rowView");
 	    return rowView;
 

@@ -29,12 +29,14 @@ import android.widget.Toast;
 
 public class SelectFriends extends ListActivity{
 	
+	GroupBankerApplication application ;
 	private FriendsDbAdapter mDbHelper;
 	private static final String TAG = "SelectFriends";
 	private EditText filterText ;
 	private SelectFriendsAdapter adapter ;
-	private Cursor c;
+	// private Cursor c;
 	private Context context ;
+	static ListView listView ;
 	
 	/* http://stackoverflow.com/questions/4188818/java-best-way-to-implement-a-dynamic-size-array-of-objects
 	 * as per this discussion, arraylists are not good performance-wise compared to traditional functions. 
@@ -49,82 +51,79 @@ public class SelectFriends extends ListActivity{
 	static HashSet<Integer> selectedLines = new HashSet<Integer>();
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		  super.onCreate(savedInstanceState);
-		  setContentView(R.layout.selectfriends);
+	public void onCreate(Bundle savedInstanceState) {  
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.selectfriends);
+		Log.v(TAG, "onCreate called") ;  
 		  
-		  Log.v(TAG, "onCreate called") ;
-		  
-		  context = this.getApplicationContext() ;
-		  
-		  mDbHelper = new FriendsDbAdapter(this);
-		  
-	      mDbHelper.open() ;
-	     
-	      Log.v(TAG, "database opened") ;
+		application = (GroupBankerApplication) getApplication();
+		context = this.getApplicationContext() ;
+		
+		listView = getListView();
+		
+		//mDbHelper = new FriendsDbAdapter(this);
+	  
+		// mDbHelper.open() ;
+     
+		//Log.v(TAG, "database opened") ;
+      
+		Cursor c = application.getFriendsDbAdapter().fetchAllFriends();
+        startManagingCursor(c);
+      
+        String[] from = new String[] {mDbHelper.KEY_NAME};
+        int[] to = new int[] { R.id.text1 };
+      
+        // Now initialize the  adapter and set it to display using our row
+        adapter =
+    	   new SelectFriendsAdapter(this, R.layout.selectfriendsrow, c, from, to);
+        
+        Log.d(TAG, "we have got an adapter");
+     
+        // Initialize the filter-text box 
+        //Code adapted from http://stackoverflow.com/questions/1737009/how-to-make-a-nice-looking-listview-filter-on-android
 	      
-	      c = mDbHelper.fetchAllFriends();
-	     // startManagingCursor(c);
-	      
-	      Log.v(TAG, "fetchAllFriends Over") ;
-	     
-	      
-	      String[] from = new String[] {mDbHelper.KEY_NAME};
-	      int[] to = new int[] { R.id.text1 };
-	      
-	      final ListView listView = getListView();
-	      Log.d(TAG, "Got listView");
-	      
-	   // Now initialize the  adapter and set it to display using our row
-	       adapter =
-	    	   new SelectFriendsAdapter(this, R.layout.selectfriendsrow, c, from, to);
-	        
-	       Log.d(TAG, "we have got an adapter");
-	     // Initialize the filter-text box 
-		 //Code adapted from http://stackoverflow.com/questions/1737009/how-to-make-a-nice-looking-listview-filter-on-android
-		      
-	       filterText = (EditText) findViewById(R.id.filtertext) ;
-	       filterText.addTextChangedListener(filterTextWatcher) ;
-	        
-	     /* Set the FilterQueryProvider, to run queries for choices
-	     * that match the specified input.
-		 *	Code adapted from http://stackoverflow.com/questions/2002607/android-how-to-text-filter-a-listview-based-on-a-simplecursoradapter
-		 */
-		/*        
-	       adapter.setFilterQueryProvider(new FilterQueryProvider() {
+        filterText = (EditText) findViewById(R.id.filtertext) ;
+        filterText.addTextChangedListener(filterTextWatcher) ;
+        
+        /* Set the FilterQueryProvider, to run queries for choices
+         * that match the specified input.
+         *	Code adapted from http://stackoverflow.com/questions/2002607/android-how-to-text-filter-a-listview-based-on-a-simplecursoradapter
+         */
+	       
+	    adapter.setFilterQueryProvider(new FilterQueryProvider() {
 	    	   	public Cursor runQuery(CharSequence constraint) {
 	    	   		
-	    	   		try {
+	    	   		//	try {
 	    	   		// Search for friends whose names begin with the specified letters.
 	    	   		Log.v(TAG, "runQuery Constraint = " + constraint) ;
 	    	   		//String selection = mDbHelper.KEY_NAME + " LIKE '%"+constraint+"%'";
 	    		      
-	    	   		mDbHelper = new FriendsDbAdapter(context);
-	    	   		mDbHelper.open();
+	    	   		//	   		mDbHelper = new FriendsDbAdapter(context);
+	    	   		//	   		mDbHelper.open();
 	    	   		
 	    	   		
-	    	   		Cursor cur = mDbHelper.fetchFriendsWithSelection(
+	    	   		Cursor cursor = application.getFriendsDbAdapter().fetchFriendsWithSelection(
                     (constraint != null ? constraint.toString() : null));
 	    	   		
-	    	   		Log.d(TAG, "runQuery cursor is " + cur + " has " + cur.getCount() + " rows  " +
-	    	   				"cursor is closed = " + cur.isClosed());
+	    	   		Log.d(TAG, "runQuery cursor is " + cursor + " has " + cursor.getCount() + " rows  " +
+	    	   				"cursor is closed = " + cursor.isClosed());
 	    	   		
-	    	   		Cursor c1 = adapter.getCursor() ;
+	    	   		//	Cursor c1 = adapter.getCursor() ;
 	    	   		
-	    	   		Log.d(TAG, "adapter's cursor is " + c1 + " isClosed is " + c1.isClosed());
+	    	   		//	Log.d(TAG, "adapter's cursor is " + c1 + " isClosed is " + c1.isClosed());
 	    	   		
 	    	   		//adapter.changeCursor(cur) ;
 	    	   		
-	    	   		return cur;
-	    	   		} catch (Exception e)	{
+	    	   		return cursor;
+	    	   		/*	} catch (Exception e)	{
 	    	   			Log.e(TAG, "runQuery Exception = " + e);
 	    	   			Cursor cur = null ;
 	    	   			return cur ;
 	    	   		}
-	    	   		
+	    	   		*/
          }
      });
-    */
+    
 	       setListAdapter(adapter);
         
 	       Log.d(TAG, "setListAdapter worked") ;
@@ -141,7 +140,25 @@ public class SelectFriends extends ListActivity{
         
 	  }
 	
-	@Override
+	private TextWatcher filterTextWatcher = new TextWatcher() {
+		  
+		  public void afterTextChanged(Editable s)	{
+			  
+		  }
+		  
+		  public void beforeTextChanged(CharSequence s, int start, int count, int after)	{
+			  
+		  }
+		  
+		  public void onTextChanged(CharSequence s, int start, int before, int count)	{
+			  Log.v(TAG, "onTextChanged called. s = " + s);
+			  ((SelectFriendsAdapter)listView.getAdapter()).getFilter().filter(s) ;
+			  
+		  }
+	  };
+	
+	/*
+	  @Override
 	protected void onStop() {
 		try{
 			Log.d(TAG, "in onStop");
@@ -167,7 +184,7 @@ public class SelectFriends extends ListActivity{
 			Log.e(TAG, "We have an exception = " + error);
 		}
 	}
-		 
+	*/ 
 			
 		@Override	
 		protected void onListItemClick(ListView parent, View v, int position, long id) {
@@ -183,22 +200,24 @@ public class SelectFriends extends ListActivity{
              if (!selectedIds.contains(bookmarkID)) {
 
             	    selectedIds.add(bookmarkID);
-            	    selectedLines.add(position);
+            	   // selectedLines.add(position);
 
 
             	} else {
 
             	     selectedIds.remove(bookmarkID);
-            	     selectedLines.remove(position);
+            	    // selectedLines.remove(position);
 
 
 
             	 if (selectedIds.isEmpty()) {
             	    //clear everything
+            		 	Log.d(TAG, "selectedIds is empty - clear everything") ;
             	        selectedIds.clear();
-            	        checkedStates.clear();      
-            	        selectedLines.clear();
+            	       // checkedStates.clear();      
+            	       // selectedLines.clear();
 
+            	        /*
             	        //refill checkedStates to avoid force close bug - out of bounds
             	        if (cursor.moveToFirst()) {
             	            while (!cursor.isAfterLast()) {    
@@ -207,27 +226,11 @@ public class SelectFriends extends ListActivity{
             	                cursor.moveToNext();
             	            }
             	        }                       
-
+						*/
             	 }
          }
 	}
 	
-	
-	  private TextWatcher filterTextWatcher = new TextWatcher() {
-		  
-		  public void afterTextChanged(Editable s)	{
-			  
-		  }
-		  
-		  public void beforeTextChanged(CharSequence s, int start, int count, int after)	{
-			  
-		  }
-		  
-		  public void onTextChanged(CharSequence s, int start, int before, int count)	{
-			  Log.v(TAG, "onTextChanged called. s = " + s);
-			  adapter.getFilter().filter(s) ;
-		  }
-	  };
 	  
 	  @Override
 	  protected void onDestroy()	{
@@ -236,3 +239,4 @@ public class SelectFriends extends ListActivity{
 		  
 	  }	  
 }
+	
