@@ -33,6 +33,7 @@ import me.rohitmishra.groupbanker.Utility ;
 public class GroupBankerActivity extends Activity {
 	
 	private static final String TAG = "GroupBankerActivity";
+	private GroupBankerApplication mApplication ;
 	
 	/* Hackbook wants us to initialize FB class via the Utility class 
 	
@@ -59,6 +60,9 @@ public class GroupBankerActivity extends Activity {
         Log.v(TAG, "onCreate called") ;
     	super.onCreate(savedInstanceState);
         
+    	mApplication = (GroupBankerApplication) getApplication();
+    	
+    	
     	mHandler = new Handler() ;
     	
     	// Create the Facebook Object using the app id.
@@ -195,6 +199,9 @@ public class GroupBankerActivity extends Activity {
                 final String picURL = jsonObject.getString("picture");
                 final String name = jsonObject.getString("name");
                 Utility.userUID = jsonObject.getString("id");
+                
+                mApplication.setUserFBID(jsonObject.getString("id"));
+                mApplication.setUserName(name);
 
                 mHandler.post(new Runnable() {
                     @Override

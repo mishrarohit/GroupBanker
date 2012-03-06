@@ -133,6 +133,17 @@ public class FriendsDbAdapter {
     		return c ;
     	}  */
     }
+    
+    public String fetchFriendName(String selectedID) throws SQLException	{
+    	String selection = KEY_ROWID + " = " + selectedID ;
+    	Cursor c = mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, selection, null, null, null, null);
+    	Log.d(TAG, "fetchFriendName cursor count = " + c.getCount());
+    	c.moveToFirst();
+    	String name =  c.getString(c.getColumnIndexOrThrow(KEY_NAME));
+    	c.close();
+    	return name ;
+    	
+    }
    
 }
 	

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -37,6 +39,7 @@ public class SelectFriends extends ListActivity{
 	// private Cursor c;
 	private Context context ;
 	static ListView listView ;
+	private Bundle bundle ;
 	
 	/* http://stackoverflow.com/questions/4188818/java-best-way-to-implement-a-dynamic-size-array-of-objects
 	 * as per this discussion, arraylists are not good performance-wise compared to traditional functions. 
@@ -46,9 +49,9 @@ public class SelectFriends extends ListActivity{
 	/* http://stackoverflow.com/questions/9399941/implementing-a-listview-with-multiple-select-with-filter-using-a-cursor-adapter/
 	 * using the answer to my own SO question. 
 	 */
-	static ArrayList<Boolean> checkedStates = new ArrayList<Boolean>();
+	//static ArrayList<Boolean> checkedStates = new ArrayList<Boolean>();
 	static HashSet<String> selectedIds = new HashSet<String>();
-	static HashSet<Integer> selectedLines = new HashSet<Integer>();
+	//static HashSet<Integer> selectedLines = new HashSet<Integer>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {  
@@ -58,6 +61,10 @@ public class SelectFriends extends ListActivity{
 		  
 		application = (GroupBankerApplication) getApplication();
 		context = this.getApplicationContext() ;
+		
+		Intent intent = getIntent() ;
+		bundle = intent.getExtras();
+		
 		
 		listView = getListView();
 		
@@ -135,7 +142,25 @@ public class SelectFriends extends ListActivity{
         
 	       Button btn;
 	       btn = (Button)findViewById(R.id.buttondone);
-        
+	       btn.setOnClickListener(new OnClickListener()	{
+
+			@Override
+			public void onClick(View v) {
+				if (selectedIds.isEmpty())	{
+					Toast.makeText(getApplicationContext(), "You need to select at least one friend.", 
+							Toast.LENGTH_LONG).show();
+				}
+				else {
+					String[] selected = selectedIds.toArray(new String[0]) ;
+					bundle.putStringArray("selectedIds", selected);
+					Intent intent = new Intent(getApplicationContext(), FinishTransactionActivity.class);
+					intent.putExtras(bundle);
+					startActivity(intent);
+					
+				}	
+			}
+	       });
+	       
 	       // mDbHelper.close();
         
 	  }
@@ -157,34 +182,7 @@ public class SelectFriends extends ListActivity{
 		  }
 	  };
 	
-	/*
-	  @Override
-	protected void onStop() {
-		try{
-			Log.d(TAG, "in onStop");
-			super.onStop();
-			
-			if(this.adapter != null)	{
-				this.adapter.getCursor().close();
-				this.adapter = null ;
-			}
-			
-			if(this.c != null)	{
-				this.c.close();
-			}
-			
-			if(this.mDbHelper.mDb != null)	{
-				this.mDbHelper.mDb.close();
-			}
-			
-			if(this.mDbHelper != null)	{
-				this.mDbHelper.close() ;
-			}
-		} catch (Exception error)	{
-			Log.e(TAG, "We have an exception = " + error);
-		}
-	}
-	*/ 
+	 
 			
 		@Override	
 		protected void onListItemClick(ListView parent, View v, int position, long id) {
@@ -200,18 +198,13 @@ public class SelectFriends extends ListActivity{
              if (!selectedIds.contains(bookmarkID)) {
 
             	    selectedIds.add(bookmarkID);
-            	   // selectedLines.add(position);
 
 
             	} else {
 
             	     selectedIds.remove(bookmarkID);
-            	    // selectedLines.remove(position);
-
-
-
-            	 if (selectedIds.isEmpty()) {
-            	    //clear everything
+            	     if (selectedIds.isEmpty()) {
+            	    	 //clear everything
             		 	Log.d(TAG, "selectedIds is empty - clear everything") ;
             	        selectedIds.clear();
             	       // checkedStates.clear();      

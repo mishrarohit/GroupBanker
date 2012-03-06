@@ -42,7 +42,11 @@ public class AddTransactionActivity extends Activity implements View.OnClickList
 			// TODO Change to edittext_blank_error
 		}
 		else	{
-        startActivity(selectIntent);
+			Bundle bundle = new Bundle() ;
+			bundle.putString("description", description) ;
+			bundle.putString("amount", amount) ;
+			selectIntent.putExtras(bundle);
+			startActivity(selectIntent);
 		}
 	}
 

@@ -31,4 +31,5 @@
     <string name="selectfriends">Select your friends</string>
     <string name="search">Search</string>
     <string name="edittext_blank_error">This field cannot be blank.</string>
+    <string name="finish_transaction_title">Who paid how much money</string>
 </resources>
