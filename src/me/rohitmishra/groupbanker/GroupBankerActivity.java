@@ -88,7 +88,7 @@ public class GroupBankerActivity extends Activity {
         
         if (Utility.mFacebook.isSessionValid()) {
         	Log.v(TAG, "onCreate - isSessionValid = true");
-           // requestUserData();
+            
             
             if (mFriends == false){
             	Log.v(TAG, "in onCreate. mFriends is false. Calling getFrieds") ;
@@ -198,10 +198,20 @@ public class GroupBankerActivity extends Activity {
 
                 final String picURL = jsonObject.getString("picture");
                 final String name = jsonObject.getString("name");
-                Utility.userUID = jsonObject.getString("id");
+                Utility.userUID = jsonObject.getString("id"); 
                 
-                mApplication.setUserFBID(jsonObject.getString("id"));
-                mApplication.setUserName(name);
+                // Add username and userfbid to shared preferences
+                try {
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putString("username", name);
+                editor.putString("userfbid", jsonObject.getString("id"));
+                editor.commit();
+                } catch (Exception e)	{
+                	Log.e(TAG, "Prob in mPrefs " + e.toString());
+                }
+                
+               // mApplication.setUserFBID(jsonObject.getString("id"));
+               // mApplication.setUserName(name);
 
                 mHandler.post(new Runnable() {
                     @Override
@@ -229,7 +239,7 @@ public class GroupBankerActivity extends Activity {
         @Override
         public void onAuthSucceed() {
             Log.v(TAG, "in FbAPIsAuthListener - onAuthSucced - true - calling getFriends") ;
-        	//requestUserData();
+        	requestUserData();
             if (mFriends == false){
             	getFriends();
             }

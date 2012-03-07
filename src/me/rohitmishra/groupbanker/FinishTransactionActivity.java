@@ -22,6 +22,8 @@ public class FinishTransactionActivity extends Activity {
 	private EditText[] paid ;
 	private EditText userPaid ;
 	
+	private int mID = 1234567 ;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState)	{
 		super.onCreate(savedInstanceState);
@@ -49,74 +51,91 @@ public class FinishTransactionActivity extends Activity {
 		//mAmount = (TextView) findViewById(R.id.amount);
 		
 		mDescription = new TextView(this);
-		mDescription.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 		mAmount = new TextView(this);
-		mAmount.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 		mDescription.setText(description);
-		mDescription.setId(1234567);	// Set a random id for alignment 
+		mDescription.setId(mID);	// Set a random id for alignment 
 		
-		mAmount.setText(amount);
-		mAmount.setId(1234568);
+		mAmount.setText("Amount = Rs. " + amount);
+		mAmount.setId(getId());
 		
 		final RelativeLayout.LayoutParams paramsDescription = 
-			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsDescription.addRule(RelativeLayout.ALIGN_LEFT);
 		//paramsDescription.setMargins(0, 0, 200, 30) ;	
 		
 		final RelativeLayout.LayoutParams paramsAmount = 
-			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsAmount.addRule(RelativeLayout.ALIGN_LEFT);
-		//paramsAmount.addRule(RelativeLayout.RIGHT_OF, mDescription.getId());
+		paramsAmount.addRule(RelativeLayout.BELOW, mDescription.getId());
 		
 		
 		relativeLayout.addView(mDescription, paramsDescription);
 		relativeLayout.addView(mAmount, paramsAmount);
 		
+		
+		TextView formTitle = new TextView(this) ;
+		formTitle.setId(getId());
+		formTitle.setText(R.string.finish_question);
+		
+		final RelativeLayout.LayoutParams paramsFormTitle = 
+			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		//paramsFormTitle.addRule(RelativeLayout.ALIGN_LEFT);
+		paramsFormTitle.addRule(RelativeLayout.BELOW, mAmount.getId());
+		
+		relativeLayout.addView(formTitle, paramsFormTitle);
+		
 		/* Set up a separate textview and edittext for the user 
 		 * We are getting username from GroupBankerApplication
 		 */
 		
-		/*
+		
 		TextView userName = new TextView(this) ;
+		userName.setId(getId());
 		userName.setText(mApplication.getUserName());
+		userName.setPadding(10, 30, 60, 0);
+		
 		final RelativeLayout.LayoutParams paramsUserName = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsUserName.addRule(RelativeLayout.ALIGN_LEFT);
-		paramsUserName.addRule(RelativeLayout.BELOW, mDescription.getId());
-		userName.setLayoutParams(paramsUserName) ;
-		relativeLayout.addView(userName);
+		paramsUserName.addRule(RelativeLayout.BELOW, formTitle.getId());
+		//paramsUserName.width = 60 ;
+		relativeLayout.addView(userName, paramsUserName);
+		
 		
 		userPaid = new EditText(this);
+		userPaid.setId(getId());
+
+		//TODO Will be good if we can control the width without hardcoding
+		
 		final RelativeLayout.LayoutParams paramsUserPaid = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsUserPaid.addRule(RelativeLayout.ALIGN_RIGHT);
+		paramsUserPaid.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		paramsUserPaid.addRule(RelativeLayout.RIGHT_OF, userName.getId());
-		userPaid.setLayoutParams(paramsUserPaid) ;
-		relativeLayout.addView(userPaid);
-		*/
+		paramsUserPaid.addRule(RelativeLayout.ALIGN_TOP, userName.getId());
+		relativeLayout.addView(userPaid, paramsUserPaid);
 		
-		
-		
-		
+		// Now lets set the textViews and edittexts for all who have paid 
 		
 		names = new TextView[selectedIds.length] ;
 		paid = new EditText[selectedIds.length] ;
-		
-		/*
+		TextView rowTextView;
+		EditText rowEditText ;
+		int i ;
 	
-		for (int i = 0; i <  selectedIds.length; i++)	{ 
-			final TextView rowTextView = new TextView(this) ;
-			final EditText rowEditText = new EditText(this) ;
+		for (i = 0; i <  selectedIds.length; i++)	{ 
+			rowTextView = new TextView(this) ;
+			rowTextView.setId(getId());
+			
+			rowEditText = new EditText(this) ;
+			rowEditText.setId(getId());
 			
 			String name = mApplication.getFriendsDbAdapter().fetchFriendName(selectedIds[i]);
 			rowTextView.setText(name);
 			
-		//	rowTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		//	rowEditText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-			
-			rowTextView.setId(i);
+			//rowTextView.setMinimumWidth(50);
+			rowTextView.setPadding(10, 30, 60, 0);
 			
 		//	rowEditText.setMinWidth(200);
 			
@@ -131,23 +150,28 @@ public class FinishTransactionActivity extends Activity {
 				paramsTextView.addRule(RelativeLayout.BELOW, names[i-1].getId());
 			}
 			paramsTextView.addRule(RelativeLayout.ALIGN_LEFT);
-			rowEditText.setLayoutParams(paramsTextView) ;
 			
 			
 			final RelativeLayout.LayoutParams paramsEditText = 
 				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-			paramsEditText.addRule(RelativeLayout.RIGHT_OF, i);
-			//params.addRule(RelativeLayout.ALIGN_RIGHT);
-			rowEditText.setLayoutParams(paramsEditText) ;
+			paramsEditText.addRule(RelativeLayout.RIGHT_OF, rowTextView.getId());
+			paramsEditText.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+			paramsEditText.addRule(RelativeLayout.ALIGN_TOP, rowTextView.getId());
+			
 		
-			relativeLayout.addView(rowTextView);
-			relativeLayout.addView(rowEditText);
+			relativeLayout.addView(rowTextView, paramsTextView);
+			relativeLayout.addView(rowEditText, paramsEditText);
 			
 			names[i] = rowTextView ;
 			paid[i] = rowEditText ;
 		}
-		*/
+		
 		this.setContentView(scrollView) ;
+	}
+	
+	public int getId()	{
+		mID = mID + 1 ;
+		return mID ;
 	}
 
 }
