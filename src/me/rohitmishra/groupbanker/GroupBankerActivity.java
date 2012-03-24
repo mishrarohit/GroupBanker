@@ -198,6 +198,7 @@ public class GroupBankerActivity extends Activity {
 
                 final String picURL = jsonObject.getString("picture");
                 final String name = jsonObject.getString("name");
+               // Log.v(TAG, "username in GroupBankaerActivity.java = " + name);
                 Utility.userUID = jsonObject.getString("id"); 
                 
                 // Add username and userfbid to shared preferences

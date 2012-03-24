@@ -94,6 +94,7 @@ public class FinishTransactionActivity extends Activity {
 		TextView userName = new TextView(this) ;
 		userName.setId(getId());
 		userName.setText(mApplication.getUserName());
+		Log.v(TAG, "username value:" + mApplication.getUserName()) ;
 		userName.setPadding(10, 30, 60, 0);
 		
 		final RelativeLayout.LayoutParams paramsUserName = 

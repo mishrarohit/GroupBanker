@@ -27,15 +27,15 @@ public class GroupBankerApplication extends Application {
 	}
 
 	public FriendsDbAdapter getFriendsDbAdapter()	{
-		return friendsDbHelper ;
+		return this.friendsDbHelper ;
 	}
 
 	public String getUserFBID() {
-		return userFBID;
+		return this.userFBID;
 	}
 
 	public String getUserName() {
-		return userName;
+		return this.userName;
 	}
 	
 }
