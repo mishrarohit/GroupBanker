@@ -43,8 +43,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		
-		mTransactionDbHelper = new TransactionDbAdapter(this);
-		mTransactionDbHelper.open();
+		mTransactionDbHelper = mApplication.getTransDbAdapter();
 		
 		description = bundle.getString("description");
 		amount = bundle.getString("amount");
@@ -203,11 +202,15 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	@Override
 	public void onClick(View arg0) {
 		
+		int lastId;
 		Date d = new Date();
 		String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
 		Log.v(TAG, "values going to the database are:" + amount1 + "description" + description);
-		mTransactionDbHelper.createTransaction(amount1, description, formatted);
+		
+		lastId =(int)mTransactionDbHelper.createTransaction(amount1, description, formatted);
+		Log.v(TAG, "The ID of the last inserted row:" + lastId);
 		Log.v(TAG, "Data inserted successfully in table trans!");
+		
 		 Toast.makeText(getApplicationContext(), "Transaction successfully saved",
                  Toast.LENGTH_LONG).show();
 		mTransactionDbHelper.close();

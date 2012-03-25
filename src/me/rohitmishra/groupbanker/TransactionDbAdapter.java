@@ -18,41 +18,34 @@ private static final String TAG = "TransactionDbAdapter" ;
 	public static final String KEY_AMOUNT = "amount";
 	public static final String KEY_DESC = "description";
 	public static final String KEY_TIME = "time";
-	private static final String DATABASE_NAME = "groupbanker" ;
 	private static final String TABLE_NAME = "trans" ;
-	private static final int DATABASE_VERSION = 2 ;
+	
 	
 	private DatabaseHelper mDbHelper ;
 	private SQLiteDatabase mDb ;
 	
-	// Database creation SQL statement 
-	//no separate storage class in sqlite to store date and time. Will use the built-in functions to store it as text
-	
-		private static final String DATABASE_CREATE = 
-			"create table trans (_id integer primary key autoincrement, " + 
-			"amount real not null, description text not null, time text not null);" ;
-		
-		
+	//removing the database create string as it will be moved to main Db Adapter class		
 		
 		private final Context mCtx ;
 		
 		private static class DatabaseHelper extends SQLiteOpenHelper {
 			
 			DatabaseHelper(Context context)	{
-				super(context, DATABASE_NAME, null, DATABASE_VERSION) ;
+				super(context, DbAdapter.DATABASE_NAME, null, DbAdapter.DATABASE_VERSION) ;
 			}
 			
 			@Override
 			public void onCreate(SQLiteDatabase db)	{
-				db.execSQL(DATABASE_CREATE);
+				//Log.v(TAG,"onCreate of TransactionDbAdapter called");
+				//db.execSQL(DATABASE_CREATE);
 			}
 			
 			@Override
 			public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)	{
-				Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
+				/*Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 	                    + newVersion + ", which will destroy all old data");
 	            db.execSQL("DROP TABLE IF EXISTS trans");
-	            onCreate(db);
+	            onCreate(db);*/
 			}
 		}
 		
@@ -105,7 +98,7 @@ private static final String TAG = "TransactionDbAdapter" ;
 	    	
 	    	Log.v(TAG,"amount:" + amount + "description:" + desc + "time:" + time); 
 	    	
-	    	return mDb.insertOrThrow(TABLE_NAME, null, initialValues) ;
+	    	return mDb.insert(TABLE_NAME, null, initialValues) ;
 	    	
 	    }
 	    

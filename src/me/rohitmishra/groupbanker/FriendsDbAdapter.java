@@ -21,36 +21,30 @@ public class FriendsDbAdapter {
 	
 	public DatabaseHelper mDbHelper ;
 	public SQLiteDatabase mDb ;
-	
-	// Database creation SQL statement 
-	
-	private static final String DATABASE_CREATE = 
-		"create table friends (_id integer primary key autoincrement, " + 
-		"fbid text not null, name text not null, imageuri text not null);" ;
-	
-	private static final String DATABASE_NAME = "groupbanker" ;
+	//removing the create string as it will be moved to main DB Adapter class
+		
 	private static final String TABLE_NAME = "friends" ; 
-	private static final int DATABASE_VERSION = 1 ;
-	
+		
 	private final Context mCtx ;
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		DatabaseHelper(Context context)	{
-			super(context, DATABASE_NAME, null, DATABASE_VERSION) ;
+			super(context, DbAdapter.DATABASE_NAME, null, DbAdapter.DATABASE_VERSION) ;
 		}
 		
 		@Override
 		public void onCreate(SQLiteDatabase db)	{
-			db.execSQL(DATABASE_CREATE);
+			//Log.v(TAG, "onCreate of FriendsDb Adapter called");
+			//db.execSQL(DATABASE_CREATE);
 		}
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)	{
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
+			/*Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS friends");
-            onCreate(db);
+            onCreate(db);*/
 		}
 	}
 		

@@ -23,38 +23,28 @@ private static final String TAG = "OverviewDbAdapter" ;
 	private DatabaseHelper mDbHelper ;
 	private SQLiteDatabase mDb ;
 	
-	// Database creation SQL statement 
+	// Database creation SQL statement moved to DbAdapter
+	private static final String TABLE_NAME = "overview" ;
+	private final Context mCtx ;
 	
-		private static final String DATABASE_CREATE = 
-				"create table overview (_id integer autoincrement, " + 
-				"fbid1 text not null, fbid2 text not null, amount real, " +
-				"PRIMARY KEY(fbid1, fbid2), " +
-				"FOREIGN KEY(fbid1) REFERENCES friends(fbid), " +
-				"FOREIGN KEY(fbid2) REFERENCES friends(fbid));" ;
-			
-			private static final String DATABASE_NAME = "groupbanker" ;
-			private static final String TABLE_NAME = "transaction" ;
-			private static final int DATABASE_VERSION = 1 ;
-			
-			private final Context mCtx ;
 			
 			private static class DatabaseHelper extends SQLiteOpenHelper {
 				
 				DatabaseHelper(Context context)	{
-					super(context, DATABASE_NAME, null, DATABASE_VERSION) ;
+					super(context, DbAdapter.DATABASE_NAME, null, DbAdapter.DATABASE_VERSION) ;
 				}
 				
 				@Override
 				public void onCreate(SQLiteDatabase db)	{
-					db.execSQL(DATABASE_CREATE);
+					//db.execSQL(DATABASE_CREATE);
 				}
 				
 				@Override
 				public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)	{
-					Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
+					/*Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 		                    + newVersion + ", which will destroy all old data");
 		            db.execSQL("DROP TABLE IF EXISTS notes");
-		            onCreate(db);
+		            onCreate(db);*/
 				}
 			}
 			
@@ -98,7 +88,7 @@ private static final String TAG = "OverviewDbAdapter" ;
 		     *  @return rowId or -1 if failed
 		     */
 		    
-		    public long createTransaction(String fbid1, String fbid2, float amount)	{
+		    public long createOverview(String fbid1, String fbid2, float amount)	{
 		    	ContentValues initialValues = new ContentValues();
 		    	initialValues.put(KEY_FBID1, fbid1);
 		    	initialValues.put(KEY_FBID2, fbid2);

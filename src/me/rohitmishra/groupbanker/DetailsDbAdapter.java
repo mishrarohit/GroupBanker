@@ -26,35 +26,27 @@ private static final String TAG = "DetailsDbAdapter" ;
 	
 	// Database creation SQL statement 
 	
-	private static final String DATABASE_CREATE = 
-			"create table details (_id integer primary key autoincrement, " + 
-			"transID integer not null, fbid text not null, toPay real , paid real , " +
-			"FOREIGN KEY(transID) REFERENCES transaction(_id), " +
-			"FOREIGN KEY(fbid) REFERENCES friends(fbid));" ;
-		
-		private static final String DATABASE_NAME = "groupbanker" ;
-		private static final String TABLE_NAME = "transaction" ;
-		private static final int DATABASE_VERSION = 1 ;
-		
-		private final Context mCtx ;
+	
+	private static final String TABLE_NAME = "details" ;
+	private final Context mCtx ;
 		
 private static class DatabaseHelper extends SQLiteOpenHelper {
 			
 			DatabaseHelper(Context context)	{
-				super(context, DATABASE_NAME, null, DATABASE_VERSION) ;
+				super(context, DbAdapter.DATABASE_NAME, null, DbAdapter.DATABASE_VERSION) ;
 			}
 			
 			@Override
 			public void onCreate(SQLiteDatabase db)	{
-				db.execSQL(DATABASE_CREATE);
+				//db.execSQL(DATABASE_CREATE);
 			}
 			
 			@Override
 			public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)	{
-				Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
+				/*Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 	                    + newVersion + ", which will destroy all old data");
-	            db.execSQL("DROP TABLE IF EXISTS notes");
-	            onCreate(db);
+	            db.execSQL("DROP TABLE IF EXISTS details");
+	            onCreate(db);*/
 			}
 		}
 		
@@ -99,7 +91,7 @@ private static class DatabaseHelper extends SQLiteOpenHelper {
 	     *  @return rowId or -1 if failed
 	     */
 	    
-	    public long createTransaction(int transID, String fbid, float toPay, float paid)	{
+	    public long createDetails(int transID, String fbid, float toPay, float paid)	{
 	    	ContentValues initialValues = new ContentValues();
 	    	initialValues.put(KEY_TRANSID, transID);
 	    	initialValues.put(KEY_FBID, fbid);

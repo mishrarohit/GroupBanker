@@ -32,7 +32,7 @@ public class FriendsList extends Activity  {
     protected static JSONArray jsonArray;
     
     private FriendsDbAdapter mDbHelper ;
-    
+        
     String FILENAME = "GroupBanker_Preferences";
     private SharedPreferences mPrefs;
     
@@ -55,6 +55,7 @@ public class FriendsList extends Activity  {
         mDbHelper = new FriendsDbAdapter(this);
         mDbHelper.open() ;
         
+       
         Bundle extras = getIntent().getExtras();
         String apiResponse = extras.getString("API_RESPONSE");
         
