@@ -32,4 +32,5 @@
     <string name="search">Search</string>
     <string name="edittext_blank_error">This field cannot be blank.</string>
     <string name="finish_question">Who paid how much money</string>
+    <string name="finishTransaction">Finish Transaction</string>
 </resources>

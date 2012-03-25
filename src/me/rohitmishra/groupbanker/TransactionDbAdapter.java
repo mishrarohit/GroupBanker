@@ -96,13 +96,16 @@ private static final String TAG = "TransactionDbAdapter" ;
 	     *  @return rowId or -1 if failed
 	     */
 	    
-	    public long createTransaction(float amount, String desc, String time)	{
+	    public long createTransaction(float amount, String desc, String time) throws SQLException	{
 	    	ContentValues initialValues = new ContentValues();
 	    	initialValues.put(KEY_AMOUNT, amount);
 	    	initialValues.put(KEY_DESC, desc);
 	    	initialValues.put(KEY_TIME, time);
 	    	
-	    	return mDb.insert(TABLE_NAME, null, initialValues) ;
+	    	Log.v(TAG,"amount:" + amount + "description:" + desc + "time:" + time); 
+	    	
+	    	return mDb.insertOrThrow(TABLE_NAME, null, initialValues) ;
+	    	
 	    }
 	    
 	    /**

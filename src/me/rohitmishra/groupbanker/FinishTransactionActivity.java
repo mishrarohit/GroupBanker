@@ -1,17 +1,20 @@
 package me.rohitmishra.groupbanker;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
 
-public class FinishTransactionActivity extends Activity { 
+public class FinishTransactionActivity extends Activity implements View.OnClickListener { 
 	private GroupBankerApplication mApplication ;
 	private static String TAG = "FinishTransactionActivity" ;
 	
@@ -21,6 +24,11 @@ public class FinishTransactionActivity extends Activity {
 	private TextView[] names ;
 	private EditText[] paid ;
 	private EditText userPaid ;
+	private TransactionDbAdapter mTransactionDbHelper;
+	private String description;
+	private String amount;
+	private float amount1;
+	
 	
 	private int mID = 1234567 ;
 	
@@ -34,8 +42,12 @@ public class FinishTransactionActivity extends Activity {
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		
-		String description = bundle.getString("description");
-		String amount = bundle.getString("amount");
+		mTransactionDbHelper = new TransactionDbAdapter(this);
+		mTransactionDbHelper.open();
+		
+		description = bundle.getString("description");
+		amount = bundle.getString("amount");
+		amount1 = Float.valueOf(amount);
 		selectedIds = bundle.getStringArray("selectedIds");
 		
 		ScrollView scrollView = new ScrollView(this);
@@ -159,6 +171,7 @@ public class FinishTransactionActivity extends Activity {
 			paramsEditText.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 			paramsEditText.addRule(RelativeLayout.ALIGN_TOP, rowTextView.getId());
 			
+				
 		
 			relativeLayout.addView(rowTextView, paramsTextView);
 			relativeLayout.addView(rowEditText, paramsEditText);
@@ -167,12 +180,34 @@ public class FinishTransactionActivity extends Activity {
 			paid[i] = rowEditText ;
 		}
 		
+		Button btn = new Button(this);
+		btn.setText(R.string.finishTransaction);
+		btn.setId(getId());
+		btn.setOnClickListener(this);
+		final RelativeLayout.LayoutParams paramsButton = 
+				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		paramsButton.addRule(RelativeLayout.BELOW, names[selectedIds.length-1].getId());
+		paramsButton.addRule(RelativeLayout.BELOW, paid[selectedIds.length-1].getId());
+		
+		relativeLayout.addView(btn, paramsButton);
+		
 		this.setContentView(scrollView) ;
 	}
 	
 	public int getId()	{
 		mID = mID + 1 ;
 		return mID ;
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		
+		Date d = new Date();
+		String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
+		Log.v(TAG, "values going to the database are:" + amount1 + "description" + description);
+		mTransactionDbHelper.createTransaction(amount1, description, formatted);
+		mTransactionDbHelper.close();
+		
 	}
 
 }
