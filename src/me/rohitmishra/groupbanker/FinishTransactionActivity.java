@@ -26,6 +26,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	private EditText[] paid ;
 	private EditText userPaid ;
 	private TransactionDbAdapter mTransactionDbHelper;
+	private DetailsDbAdapter detailsHelper;
 	private String description;
 	private String amount;
 	private float amount1;
@@ -44,6 +45,9 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		Bundle bundle = intent.getExtras();
 		
 		mTransactionDbHelper = mApplication.getTransDbAdapter();
+		
+		detailsHelper = new DetailsDbAdapter(this);
+		detailsHelper.open();
 		
 		description = bundle.getString("description");
 		amount = bundle.getString("amount");
@@ -202,18 +206,36 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	@Override
 	public void onClick(View arg0) {
 		
-		int lastId;
+		int lastId,i;
+		float paid1;
 		Date d = new Date();
 		String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
-		Log.v(TAG, "values going to the database are:" + amount1 + "description" + description);
+		Log.v(TAG, "values going in the transaction table are:" + amount1 + "description" + description);
 		
+		//entering details in transaction database
 		lastId =(int)mTransactionDbHelper.createTransaction(amount1, description, formatted);
 		Log.v(TAG, "The ID of the last inserted row:" + lastId);
-		Log.v(TAG, "Data inserted successfully in table trans!");
+		
+		//entering details in Details table
+		
+		//amount equally divided among people involved
+		float toPay = amount1/(selectedIds.length+1);
+		
+		
+		for (i=0; i<selectedIds.length; i++)	{
+			
+		    String paidVal = paid[i].getText().toString();
+			paid1 = Float.valueOf(paidVal);
+			
+			Log.v(TAG, "values going in the details table are: transID = " + lastId + "fbid=" + selectedIds[i] + "paid = " + paid1 + "topay = " + toPay);
+			detailsHelper.createDetails(lastId,selectedIds[i], toPay, paid1);
+		}
+		
 		
 		 Toast.makeText(getApplicationContext(), "Transaction successfully saved",
                  Toast.LENGTH_LONG).show();
 		mTransactionDbHelper.close();
+		detailsHelper.close();
 		
 	}
 
