@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FinishTransactionActivity extends Activity implements View.OnClickListener { 
 	private GroupBankerApplication mApplication ;
@@ -206,6 +207,9 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
 		Log.v(TAG, "values going to the database are:" + amount1 + "description" + description);
 		mTransactionDbHelper.createTransaction(amount1, description, formatted);
+		Log.v(TAG, "Data inserted successfully in table trans!");
+		 Toast.makeText(getApplicationContext(), "Transaction successfully saved",
+                 Toast.LENGTH_LONG).show();
 		mTransactionDbHelper.close();
 		
 	}

@@ -18,6 +18,9 @@ private static final String TAG = "TransactionDbAdapter" ;
 	public static final String KEY_AMOUNT = "amount";
 	public static final String KEY_DESC = "description";
 	public static final String KEY_TIME = "time";
+	private static final String DATABASE_NAME = "groupbanker" ;
+	private static final String TABLE_NAME = "trans" ;
+	private static final int DATABASE_VERSION = 2 ;
 	
 	private DatabaseHelper mDbHelper ;
 	private SQLiteDatabase mDb ;
@@ -26,12 +29,10 @@ private static final String TAG = "TransactionDbAdapter" ;
 	//no separate storage class in sqlite to store date and time. Will use the built-in functions to store it as text
 	
 		private static final String DATABASE_CREATE = 
-			"create table transaction (_id integer primary key autoincrement, " + 
+			"create table trans (_id integer primary key autoincrement, " + 
 			"amount real not null, description text not null, time text not null);" ;
 		
-		private static final String DATABASE_NAME = "groupbanker" ;
-		private static final String TABLE_NAME = "transaction" ;
-		private static final int DATABASE_VERSION = 1 ;
+		
 		
 		private final Context mCtx ;
 		
@@ -50,7 +51,7 @@ private static final String TAG = "TransactionDbAdapter" ;
 			public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)	{
 				Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 	                    + newVersion + ", which will destroy all old data");
-	            db.execSQL("DROP TABLE IF EXISTS transaction");
+	            db.execSQL("DROP TABLE IF EXISTS trans");
 	            onCreate(db);
 			}
 		}

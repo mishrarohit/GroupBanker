@@ -35,6 +35,7 @@ public class GroupBankerApplication extends Application {
 	}
 
 	public String getUserName() {
+		Log.v(TAG, "Username Getting returned:" + userName);
 		return this.userName;
 	}
 	
