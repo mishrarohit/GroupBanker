@@ -5,25 +5,17 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 public class GroupBankerApplication extends Application {
-
+	
 	private static String TAG = "GroupBankerApplication";
-	private DbAdapter mainDbHelper;
 	private FriendsDbAdapter friendsDbHelper ;
-	private TransactionDbAdapter transHelper;
 	private SharedPreferences mPrefs ;
 	private String userFBID ;
 	private String userName ;
-
+	
 	@Override
 	public void onCreate()	{
-		mainDbHelper = new DbAdapter(this);
-		mainDbHelper.open();
-		
 		friendsDbHelper = new FriendsDbAdapter(this);
 		friendsDbHelper.open() ;
-		
-		transHelper = new TransactionDbAdapter(this);
-		transHelper.open();
 		
 		mPrefs = getSharedPreferences(Constants.preferences, 0);
 	}
@@ -31,16 +23,12 @@ public class GroupBankerApplication extends Application {
 	public FriendsDbAdapter getFriendsDbAdapter()	{
 		return this.friendsDbHelper ;
 	}
-	
-	public TransactionDbAdapter getTransDbAdapter()	{
-		return this.transHelper ;
-	}
 
 	/* We were earlier retrieving UserFBID and UserName from SharedPreferences in onCreate. 
 	 * The bug that was coming was because GroupBankerApplication may (or always will) get initialized
 	 * before other classes. It's onCreate will then assign these two variables null value.
 	 */
-
+	
 	public String getUserFBID() {
 		this.userFBID = mPrefs.getString("userfbid", null);
 		return this.userFBID;
@@ -51,5 +39,5 @@ public class GroupBankerApplication extends Application {
 		Log.v(TAG, "Username Getting returned:" + this.userName);
 		return this.userName;
 	}
-
+	
 }
