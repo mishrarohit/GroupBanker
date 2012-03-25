@@ -7,21 +7,33 @@ import android.util.Log;
 public class GroupBankerApplication extends Application {
 	
 	private static String TAG = "GroupBankerApplication";
+	private DbAdapter mainDbHelper;
 	private FriendsDbAdapter friendsDbHelper ;
+	private TransactionDbAdapter transDbHelper;
 	private SharedPreferences mPrefs ;
 	private String userFBID ;
 	private String userName ;
 	
 	@Override
 	public void onCreate()	{
+		mainDbHelper = new DbAdapter(this);
+		mainDbHelper.open();
+		
 		friendsDbHelper = new FriendsDbAdapter(this);
 		friendsDbHelper.open() ;
+		
+		transDbHelper = new TransactionDbAdapter(this);
+		transDbHelper.open();
 		
 		mPrefs = getSharedPreferences(Constants.preferences, 0);
 	}
 
 	public FriendsDbAdapter getFriendsDbAdapter()	{
 		return this.friendsDbHelper ;
+	}
+	
+	public TransactionDbAdapter getTransDbAdapter()	{
+		return this.transDbHelper ;
 	}
 
 	/* We were earlier retrieving UserFBID and UserName from SharedPreferences in onCreate. 
