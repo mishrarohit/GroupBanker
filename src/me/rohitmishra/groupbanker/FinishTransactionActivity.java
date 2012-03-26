@@ -2,7 +2,7 @@ package me.rohitmishra.groupbanker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.lang.Math;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +27,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	private EditText userPaid ;
 	private TransactionDbAdapter mTransactionDbHelper;
 	private DetailsDbAdapter detailsHelper;
+	private overviewDbAdapter overviewHelper;
 	private String description;
 	private String amount;
 	private float amount1;
@@ -48,6 +49,9 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		
 		detailsHelper = new DetailsDbAdapter(this);
 		detailsHelper.open();
+		
+		overviewHelper = new overviewDbAdapter(this);
+		overviewHelper.open();
 		
 		description = bundle.getString("description");
 		amount = bundle.getString("amount");
@@ -207,7 +211,9 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	public void onClick(View arg0) {
 		
 		int lastId,i;
-		float paid1;
+		float paid1, difference;
+		String[] userId = new String[selectedIds.length+1];
+		float[] diff = new float[selectedIds.length+1];
 		Date d = new Date();
 		String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
 		Log.v(TAG, "values going in the transaction table are:" + amount1 + "description" + description);
@@ -221,15 +227,64 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		//amount equally divided among people involved
 		float toPay = amount1/(selectedIds.length+1);
 		
+		// inserting the app user details in the details table
 		
+		String paidVal1 = userPaid.getText().toString();
+		paid1 = Float.valueOf(paidVal1);
+		detailsHelper.createDetails(lastId, "0", toPay, paid1);
+		
+		difference = paid1 - toPay;
+		userId[0] = "0";
+		diff[0] = difference;
+		
+		//entering the details for rest of the people involved in transaction
 		for (i=0; i<selectedIds.length; i++)	{
 			
+			difference = 0;
 		    String paidVal = paid[i].getText().toString();
 			paid1 = Float.valueOf(paidVal);
+			difference = paid1-toPay;
 			
+			//inserting the values in corresponding arrays
+			userId[i+1] = selectedIds[i];
+			diff[i+1] = difference;
+						
 			Log.v(TAG, "values going in the details table are: transID = " + lastId + "fbid=" + selectedIds[i] + "paid = " + paid1 + "topay = " + toPay);
 			detailsHelper.createDetails(lastId,selectedIds[i], toPay, paid1);
 		}
+		
+		//a bit of housekeeping i want to know the arrays are created well
+		
+		Log.v(TAG, "the userID array: ");
+		for(i=0; i<= selectedIds.length; i++)	{
+			
+			Log.v(TAG, userId[i] + ",");
+		}
+		
+		Log.v(TAG, "the difference array: " );
+		for(i=0; i<= selectedIds.length; i++)	{
+					
+			Log.v(TAG, diff[i] + ",");
+		}
+		
+		//sorting the arrays
+		sort(userId, diff);
+		Log.v(TAG, "Sorted Arrays are");
+		
+		Log.v(TAG, "the userID array: ");
+		for(i=0; i<= selectedIds.length; i++)	{
+			
+			Log.v(TAG, userId[i] + ",");
+		}
+		
+		Log.v(TAG, "the difference array: " );
+		for(i=0; i<= selectedIds.length; i++)	{
+					
+			Log.v(TAG, diff[i] + ",");
+		}
+		
+		//sending the sorted array to update the overview table
+		updateOverview(userId, diff);
 		
 		
 		 Toast.makeText(getApplicationContext(), "Transaction successfully saved",
@@ -237,6 +292,95 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		mTransactionDbHelper.close();
 		detailsHelper.close();
 		
+	}
+	
+	//selection sort function
+	
+	public void sort(String userId[], float diff[])	{
+		
+		int l = userId.length;
+		int i,j,maxIndex;
+		float temp1;
+		String temp2;
+		
+		for(i = 0; i < l-1; i++)	{
+			
+			maxIndex = i;
+			
+			for (j=i+1; j < l; j++)	{
+				
+				if(diff[j] > diff[maxIndex])	{
+					maxIndex = j;					
+				}
+				
+				if(maxIndex != i)	{
+					temp1 = diff[i];
+					diff[i] = diff[maxIndex];
+					diff[maxIndex] = temp1;
+					
+					temp2 = userId[i];
+					userId[i]= userId[maxIndex];
+					userId[maxIndex] = temp2;
+				}
+			}
+		}
+	}
+	
+	//function definition for updateOverview
+	public void updateOverview(String userId[], float diff[])	{
+		
+		int l = selectedIds.length; 	//last index of the arrays
+		int f = 0, i = 0;    					//first index of the array
+		long[] overviewIds = new long[selectedIds.length];
+		String user1, user2;
+		float amount;
+		
+		//loop the diff array till first index <= last index
+		
+		while(f < l)	{
+			
+			user1 = userId[f];
+			user2 = userId[l];
+			
+			// 3 conditions to be taken care of while comparing the difference values
+			if(diff[f] > diff[l])	{
+				
+				diff[f] = diff[f] - java.lang.Math.abs(diff[l]);
+				amount = java.lang.Math.abs(diff[l]);
+				l--;
+			}
+			
+			else if(diff[f] < diff[l])	{
+				
+				diff[l] = -(java.lang.Math.abs(diff[l]) - diff[f]);
+				amount = diff[f];
+				f++;
+			}
+			
+			else	{
+				
+				amount = diff[f];
+				l--;
+				f++;
+			}
+			
+			int id1 = Integer.valueOf(user1);
+			int id2 = Integer.valueOf(user2);
+			String temp;
+			
+			if(id1 > id2)	{
+				temp = user1;
+				user1 = user2;
+				user2 = temp;
+				amount = -(amount);
+			}
+			
+			Log.v(TAG, "Value going in overview update function user1:" + user1 + "user2:" + user2 + "amount:" + amount);
+		//updating the overview table
+			overviewIds[i] = overviewHelper.updateAmount(user1, user2, amount);
+			Log.v(TAG, "id returned from update:" + overviewIds[i]);
+			i++;
+		}
 	}
 
 }

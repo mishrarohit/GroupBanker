@@ -15,8 +15,8 @@ public class overviewDbAdapter {
 private static final String TAG = "OverviewDbAdapter" ;
 	
 	public static final String KEY_ROWID = "_id";
-	public static final String KEY_FBID1 = "fbid1";
-	public static final String KEY_FBID2 = "fbid2";
+	public static final String KEY_USERID1 = "userId1";
+	public static final String KEY_USERID2 = "userId2";
 	public static final String KEY_AMOUNT = "amount";
 	
 	
@@ -88,10 +88,10 @@ private static final String TAG = "OverviewDbAdapter" ;
 		     *  @return rowId or -1 if failed
 		     */
 		    
-		    public long createOverview(String fbid1, String fbid2, float amount)	{
+		    public long createOverview(String userId1, String userId2, float amount)	{
 		    	ContentValues initialValues = new ContentValues();
-		    	initialValues.put(KEY_FBID1, fbid1);
-		    	initialValues.put(KEY_FBID2, fbid2);
+		    	initialValues.put(KEY_USERID1, userId1);
+		    	initialValues.put(KEY_USERID2, userId2);
 		    	initialValues.put(KEY_AMOUNT, amount);
 		    			    	
 		    	return mDb.insert(TABLE_NAME, null, initialValues) ;
@@ -105,10 +105,40 @@ private static final String TAG = "OverviewDbAdapter" ;
 		     *  @param amount the amount involved among them
 		     * @return true if the note was successfully updated, false otherwise
 		     */
-		    public boolean updateAmount(String fbid1, String fbid2, float amt) {
-		        ContentValues args = new ContentValues();
-		        args.put(KEY_AMOUNT, amt);
-
-		        return mDb.update(TABLE_NAME, args, KEY_FBID1 + "=" + fbid1 + "AND" + KEY_FBID2 + "=" + fbid2, null) > 0;
+		    public long updateAmount(String userId1, String userId2, float amt) {
+		        
+		    	/* first we have to check if user1 and user2 combination exists in the table
+		         * if yes => update the entry with the incoming amount
+		         * if no => call createOveriew function and create a new entry
+		         * in both cases we need the id of the row updated or created*/
+		    	
+		    	String selection = "userId1 = ? AND userId2 = ?";
+		    	Cursor c =  mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_USERID1, KEY_USERID2, KEY_AMOUNT}, selection, new String[]{userId1, userId2}, null, null, null);
+		    			    	
+		    	//if cursor has non zero rows the tuple does not exists moveToFirst returns false
+		    	if (!c.moveToFirst())	{
+		    		
+		    		long id = createOverview(userId1, userId2, amt);
+		    		c.close();
+		    		return id;
+		    	}
+		    	
+		    	//else update the existing record and update and enter the consolidated amount
+		    	else {
+		    		
+		    		c.moveToFirst();
+			    	float previousAmt;
+			    	previousAmt = c.getFloat(c.getColumnIndex(KEY_AMOUNT));
+			    	amt = previousAmt + amt;
+			    	Log.v(TAG, "The updated amount value = " + amt);
+			    	ContentValues args = new ContentValues();
+			        args.put(KEY_AMOUNT, amt);
+			        mDb.update(TABLE_NAME, args,  selection, new String[] {userId1, userId2});
+			        long id = c.getLong(c.getColumnIndexOrThrow(KEY_ROWID));
+			        c.close();
+			        return id;
+		       
 		    }
+		    	
+		  }
 }

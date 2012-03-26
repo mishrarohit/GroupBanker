@@ -31,11 +31,10 @@ public class DbAdapter {
 	//create table string for overview
 	
 	private static final String CREATE_TABLE_OVERVIEW =
-			"create table overview (_id integer, " + 
-			"fbid1 text not null, fbid2 text not null, amount real, " +
-			"PRIMARY KEY(fbid1, fbid2), " +
-			"FOREIGN KEY(fbid1) REFERENCES friends(fbid), " +
-			"FOREIGN KEY(fbid2) REFERENCES friends(fbid));" ;
+			"create table overview (_id integer primary key autoincrement, " + 
+			"userId1 text not null, userId2 text not null, amount real, " +
+			"FOREIGN KEY(userId1) REFERENCES friends(_id), " +
+			"FOREIGN KEY(userId2) REFERENCES friends(_id));" ;
 	
 	//create table string for details
 	
