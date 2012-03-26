@@ -36,7 +36,7 @@ public class OverviewActivity extends Activity{
 		bundle = intent.getExtras();
 		Log.v("TAG", "bundle:" + bundle);
 		
-		if (bundle.isEmpty())
+		if (bundle == null)
 		{
 			TextView textview = new TextView(this);
 	        textview.setText("Consolidated overview of the current transaction");
