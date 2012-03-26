@@ -141,4 +141,31 @@ private static final String TAG = "OverviewDbAdapter" ;
 		    }
 		    	
 		  }
+		    
+		public String[] getUserIds(long overviewId)	{
+			
+			String selection = KEY_ROWID + "=" + overviewId;
+	    	Cursor c =  mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_USERID1, KEY_USERID2, KEY_AMOUNT}, selection, null, null, null, null);
+	    	c.moveToFirst();
+	    	
+	    	String[] userId = new String[2];
+	    	userId[0] = c.getString(c.getColumnIndex(KEY_USERID1));
+	    	userId[1] = c.getString(c.getColumnIndex(KEY_USERID2));
+	    	c.close();
+	    	
+	    	return userId;
+		}
+		
+		
+		public float getAmount(long overviewId)	{
+			
+			String selection = KEY_ROWID + "=" + overviewId;
+	    	Cursor c =  mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_USERID1, KEY_USERID2, KEY_AMOUNT}, selection, null, null, null, null);
+	    	c.moveToFirst();
+	    	
+	    	float amt = c.getFloat(c.getColumnIndex(KEY_AMOUNT));
+	    	c.close();
+	    	return amt;
+		}
+		
 }

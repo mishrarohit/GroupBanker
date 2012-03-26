@@ -31,6 +31,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	private String description;
 	private String amount;
 	private float amount1;
+	private Bundle overviewBundle = new Bundle();
 	
 	
 	private int mID = 1234567 ;
@@ -54,8 +55,12 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		overviewHelper.open();
 		
 		description = bundle.getString("description");
+		overviewBundle.putString("description", description);
+		
 		amount = bundle.getString("amount");
 		amount1 = Float.valueOf(amount);
+		overviewBundle.putFloat("amount", amount1);
+		
 		selectedIds = bundle.getStringArray("selectedIds");
 		
 		ScrollView scrollView = new ScrollView(this);
@@ -214,6 +219,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		float paid1, difference;
 		String[] userId = new String[selectedIds.length+1];
 		float[] diff = new float[selectedIds.length+1];
+		long[] finalIds;
 		Date d = new Date();
 		String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
 		Log.v(TAG, "values going in the transaction table are:" + amount1 + "description" + description);
@@ -283,14 +289,18 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 			Log.v(TAG, diff[i] + ",");
 		}
 		
-		//sending the sorted array to update the overview table
-		updateOverview(userId, diff);
-		
-		
+		 //sending the sorted array to update the overview table
+		updateOverview(userId, diff);	 
+		 				
 		 Toast.makeText(getApplicationContext(), "Transaction successfully saved",
                  Toast.LENGTH_LONG).show();
 		mTransactionDbHelper.close();
 		detailsHelper.close();
+		Log.v("TAG", "starting activity overview");
+		Intent intent = new Intent(getApplicationContext(), OverviewActivity.class);
+		intent.putExtras(overviewBundle);
+		//intent.addCategory("android.intent.category.ALTERNATIVE");
+		startActivity(intent);
 		
 	}
 	
@@ -381,6 +391,12 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 			Log.v(TAG, "id returned from update:" + overviewIds[i]);
 			i++;
 		}
+		
+		overviewBundle.putLongArray("overviewIds", overviewIds);
+		overviewBundle.putInt("idLength", i);
+		
 	}
+	
+	  
 
 }

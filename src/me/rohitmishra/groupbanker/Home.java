@@ -25,7 +25,7 @@ public class Home extends TabActivity	{
 		
 		// Create an Intent to launch an Activity for the tab (to be reused)
 	    intent = new Intent().setClass(this, OverviewActivity.class);
-		
+		//intent.addCategory("android.intent.category.DEFAULT");
 		// Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("overview").setIndicator("Overview",
 	                      res.getDrawable(R.drawable.ic_tab_artists))
