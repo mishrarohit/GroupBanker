@@ -89,6 +89,7 @@ public class OverviewActivity extends Activity{
 		relativeLayout.addView(mAmount, paramsAmount);
 		
 		TextView rowTextView;
+		TextView[] entries = new TextView[idLength];
 		int i ;
 		
 		//iterating over the id array to set each row
@@ -100,20 +101,18 @@ public class OverviewActivity extends Activity{
 			
 			userIds = overviewHelper.getUserIds(overviewIds[i]);
 			
-			if(userIds[0] == "0")	{
-			name1 = mApplication.getUserName();
-			}
 			
-			else {
 			name1 = friendsHelper.fetchFriendName(userIds[0]);
+			name2 = friendsHelper.fetchFriendName(userIds[1]);
+			
+			if (name1 == "0") {
+				
+				name1 = mApplication.getUserName();
 			}
 			
-			if(userIds[1] == "0")	{
-			name2 = mApplication.getUserName();
-			}
+			if(name2 == "0")	{
 				
-			else {
-			name2 = friendsHelper.fetchFriendName(userIds[1]);
+				name2 = mApplication.getUserName();
 			}
 				
 			Log.v("TAG", "name 1:" + name1 + "name 2:" + name2);
@@ -131,7 +130,7 @@ public class OverviewActivity extends Activity{
 			else if(amt < 0)	{
 				
 				//user 1 has to pay user 2
-				rowTextView.setText(name1 + " has to pay Rs" + amt + " to " + name2);
+				rowTextView.setText(name1 + " has to pay Rs" + -(amt) + " to " + name2);
 			}
 			
 			else  {
@@ -147,11 +146,23 @@ public class OverviewActivity extends Activity{
 					new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 			
 			paramsTextView.addRule(RelativeLayout.ALIGN_LEFT);
+			
+			if(i == 0)	{
+				paramsTextView.addRule(RelativeLayout.BELOW, mAmount.getId());
+			}
+			
+			else	{
+				
+				paramsTextView.addRule(RelativeLayout.BELOW, entries[i-1].getId());
+			}
 			relativeLayout.addView(rowTextView, paramsTextView);
+			entries[i] = rowTextView;
 				
 		}
 		
 		this.setContentView(scrollView) ;
+		friendsHelper.close();
+		overviewHelper.close();
   }
 }
 	
