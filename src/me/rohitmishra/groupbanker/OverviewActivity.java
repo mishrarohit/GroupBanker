@@ -3,13 +3,14 @@ package me.rohitmishra.groupbanker;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.util.Log;
 import android.view.View;
 
-public class OverviewActivity extends Activity{
+public class OverviewActivity extends Activity implements View.OnClickListener{
 	
 	 private Bundle bundle;
 	 private GroupBankerApplication mApplication ;
@@ -160,6 +161,17 @@ public class OverviewActivity extends Activity{
 				
 		}
 		
+		Button btn = new Button(this);
+		btn.setText(R.string.newTransaction);
+		btn.setId(getId());
+		btn.setOnClickListener(this);
+		final RelativeLayout.LayoutParams paramsButton = 
+				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		paramsButton.addRule(RelativeLayout.BELOW, entries[idLength-1].getId());
+		
+		
+		relativeLayout.addView(btn, paramsButton);
+		
 		this.setContentView(scrollView) ;
 		friendsHelper.close();
 		overviewHelper.close();
@@ -170,5 +182,14 @@ public class OverviewActivity extends Activity{
 	public int getId()	{
 		mID = mID + 1 ;
 		return mID ;
+	}
+	
+	@Override
+	public void onClick(View arg0)	{
+		
+		Intent intent = new Intent();
+		intent.setClass(getApplicationContext(), Home.class);
+		startActivity(intent);
+		
 	}
 }

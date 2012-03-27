@@ -358,6 +358,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 				diff[f] = diff[f] - java.lang.Math.abs(diff[l]);
 				amount = java.lang.Math.abs(diff[l]);
 				l--;
+				if(diff[f] == 0)
+					f++;
 			}
 			
 			else if(diff[f] < diff[l])	{
@@ -365,6 +367,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 				diff[l] = -(java.lang.Math.abs(diff[l]) - diff[f]);
 				amount = diff[f];
 				f++;
+				if(diff[l] == 0)
+					l--;
 			}
 			
 			else	{
