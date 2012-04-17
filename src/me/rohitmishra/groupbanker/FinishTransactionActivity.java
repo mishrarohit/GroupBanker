@@ -39,7 +39,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	@Override
 	public void onCreate(Bundle savedInstanceState)	{
 		super.onCreate(savedInstanceState);
-		// setContentView(R.layout.finishtransaction);
+				
+		Log.v("TAG", "in onCreate of FinishTransactionActivity");
 		
 		mApplication = (GroupBankerApplication) getApplication();
 		
@@ -65,15 +66,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		
 		ScrollView scrollView = new ScrollView(this);
 		RelativeLayout relativeLayout = new RelativeLayout(this) ;
-		// relativeLayout.setOrientation(relativeLayout.VERTICAL);
 		scrollView.addView(relativeLayout);
 		
-		
-		// ViewGroup relativeLayout = (ViewGroup) findViewById(R.id.paid_relativeLayout);
-		// Log.d(TAG, "relativeLayout made");
-		
-		//mDescription = (TextView) findViewById(R.id.description) ;
-		//mAmount = (TextView) findViewById(R.id.amount);
 		
 		mDescription = new TextView(this);
 		
@@ -88,7 +82,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		final RelativeLayout.LayoutParams paramsDescription = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsDescription.addRule(RelativeLayout.ALIGN_LEFT);
-		//paramsDescription.setMargins(0, 0, 200, 30) ;	
+		
 		
 		final RelativeLayout.LayoutParams paramsAmount = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -106,7 +100,6 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		
 		final RelativeLayout.LayoutParams paramsFormTitle = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		//paramsFormTitle.addRule(RelativeLayout.ALIGN_LEFT);
 		paramsFormTitle.addRule(RelativeLayout.BELOW, mAmount.getId());
 		
 		relativeLayout.addView(formTitle, paramsFormTitle);
@@ -126,7 +119,6 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsUserName.addRule(RelativeLayout.ALIGN_LEFT);
 		paramsUserName.addRule(RelativeLayout.BELOW, formTitle.getId());
-		//paramsUserName.width = 60 ;
 		relativeLayout.addView(userName, paramsUserName);
 		
 		
@@ -211,6 +203,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		mID = mID + 1 ;
 		return mID ;
 	}
+	
+	
 
 	@Override
 	public void onClick(View arg0) {
@@ -299,8 +293,12 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		Log.v("TAG", "starting activity overview");
 		Intent intent = new Intent(getApplicationContext(), OverviewActivity.class);
 		intent.putExtras(overviewBundle);
-		//intent.addCategory("android.intent.category.ALTERNATIVE");
-		startActivity(intent);
+				
+		//displaying the overview of the current transaction in the same tab
+		
+		TabGroupActivity parentActivity1 = (TabGroupActivity)getParent();
+		parentActivity1.startChildActivity("OverViewActivity", intent);
+		
 		
 	}
 	
@@ -353,19 +351,21 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 			user2 = userId[l];
 			
 			// 3 conditions to be taken care of while comparing the difference values
-			if(diff[f] > diff[l])	{
+			if(diff[f] > java.lang.Math.abs(diff[l]))	{
 				
 				diff[f] = diff[f] - java.lang.Math.abs(diff[l]);
 				amount = java.lang.Math.abs(diff[l]);
+				diff[l] = 0;
 				l--;
 				if(diff[f] == 0)
 					f++;
 			}
 			
-			else if(diff[f] < diff[l])	{
+			else if(diff[f] < java.lang.Math.abs(diff[l]))	{
 				
-				diff[l] = -(java.lang.Math.abs(diff[l]) - diff[f]);
+				diff[l] = java.lang.Math.abs(diff[l]) - diff[f];
 				amount = diff[f];
+				diff[f] = 0;
 				f++;
 				if(diff[l] == 0)
 					l--;
@@ -397,10 +397,25 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		}
 		
 		overviewBundle.putLongArray("overviewIds", overviewIds);
+		overviewBundle.putStringArray("selectedIds", selectedIds);
 		overviewBundle.putInt("idLength", i);
 		
 	}
 	
-	  
+	@Override
+	public void onStart()	{
+		super.onStart();
+		Log.v("TAG", "In onStart of FinishTransactionActivity");
+	}
+	
+	/*public void switchTabInActivity(int indexTabToSwitchTo, Intent intent)	{
+		Home parentActivity = (Home)this.getParent().getParent();
+		parentActivity.switchTab(indexTabToSwitchTo);
+		
+		TabGroupActivity parentActivity1 = (TabGroupActivity)getParent();
+		parentActivity1.startChildActivity("OverView", intent);
+		
+		//this.finish();
+	}*/
 
 }

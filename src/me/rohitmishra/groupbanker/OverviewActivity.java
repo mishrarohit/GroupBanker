@@ -26,26 +26,19 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
 	 private float amount;
 	 private String name1;
 	 private String name2;
+	 private String[] selectedIds;
 	 private int mID = 12457;
 		
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        Log.v("TAG", "In onCreate of OverviewActivity");
         mApplication = (GroupBankerApplication) getApplication();
-		
+        
 		Intent intent = getIntent();
 		bundle = intent.getExtras();
 		Log.v("TAG", "bundle:" + bundle);
 		
-		if (bundle == null)
-		{
-			TextView textview = new TextView(this);
-	        textview.setText("Consolidated overview of the current transaction");
-	        setContentView(textview);
-		}
-		
-		else
-		{
 		overviewHelper = new overviewDbAdapter(this);
 		overviewHelper.open();
 		
@@ -57,11 +50,10 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
 		overviewIds = bundle.getLongArray("overviewIds");
 		description = bundle.getString("description");
 		amount = bundle.getFloat("amount");
+		selectedIds = bundle.getStringArray("selectedIds");	
+ 
+		//generating dynamic view
 		
-        /*TextView textview = new TextView(this);
-        textview.setText("Consolidated overview of the current transaction");
-        setContentView(textview);*/
-        
         ScrollView scrollView = new ScrollView(this);
 		RelativeLayout relativeLayout = new RelativeLayout(this) ;
 		scrollView.addView(relativeLayout);
@@ -78,8 +70,7 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
 		final RelativeLayout.LayoutParams paramsDescription = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsDescription.addRule(RelativeLayout.ALIGN_LEFT);
-		//paramsDescription.setMargins(0, 0, 200, 30) ;	
-		
+				
 		final RelativeLayout.LayoutParams paramsAmount = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsAmount.addRule(RelativeLayout.ALIGN_LEFT);
@@ -176,7 +167,7 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
 		friendsHelper.close();
 		overviewHelper.close();
   }
-}
+
 	
 	
 	public int getId()	{
@@ -187,6 +178,8 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
 	@Override
 	public void onClick(View arg0)	{
 		
+		overviewIds = null;
+		selectedIds = null;
 		Intent intent = new Intent();
 		intent.setClass(getApplicationContext(), Home.class);
 		startActivity(intent);

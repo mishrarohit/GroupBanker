@@ -155,8 +155,8 @@ public class SelectFriends extends ListActivity{
 					bundle.putStringArray("selectedIds", selected);
 					Intent intent = new Intent(getApplicationContext(), FinishTransactionActivity.class);
 					intent.putExtras(bundle);
-					startActivity(intent);
-					
+					TabGroupActivity parentActivity = (TabGroupActivity)getParent();
+					parentActivity.startChildActivity("FinishTransactionActivity", intent);
 				}	
 			}
 	       });
@@ -224,6 +224,11 @@ public class SelectFriends extends ListActivity{
          }
 	}
 	
+		@Override
+		public void onStart()	{
+			super.onStart();
+			Log.v("TAG", "In onStart of SelectFriends");
+		}
 	  
 	  @Override
 	  protected void onDestroy()	{

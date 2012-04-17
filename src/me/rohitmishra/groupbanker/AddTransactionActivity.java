@@ -46,8 +46,14 @@ public class AddTransactionActivity extends Activity implements View.OnClickList
 			bundle.putString("description", description) ;
 			bundle.putString("amount", amount) ;
 			selectIntent.putExtras(bundle);
-			startActivity(selectIntent);
+			//startActivity(selectIntent);
+			TabGroupActivity parentActivity = (TabGroupActivity)getParent();
+			parentActivity.startChildActivity("SelectFriends", selectIntent);
+			//this.finish();
+			
 		}
 	}
+	
+	
 
 }

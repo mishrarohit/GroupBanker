@@ -12,28 +12,33 @@ public class Home extends TabActivity	{
 	
 	private final String TAG = "Home" ; 
 	
-	@Override
+	TabHost tabHost1; 
+	
+		@Override
 	public void onCreate(Bundle savedInstanceState)	{
+			
 		Log.i(TAG, "-i onCreate called") ;
 		super.onCreate(savedInstanceState) ;
 		setContentView(R.layout.home) ;
-		
-		Resources res = getResources() ; // Resource object to get Drawables
-		TabHost tabHost = getTabHost() ; // The activity TabHost
+		Resources res = getResources() ; 
+		TabHost tabHost = getTabHost() ; 
 		TabHost.TabSpec spec; 
+		
+		Log.v("TAG", "in onCreate of Home.java. var res=" + res + "var tabHost = " + tabHost);
+		
 		Intent intent ;
 		
-		// Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent().setClass(this, OverviewActivity.class);
-		//intent.addCategory("android.intent.category.DEFAULT");
+		// Create an Intent to launch an ActivityGroup for the tab (to be reused)
+	    intent = new Intent().setClass(this, TabGroup2Activity.class);
+		
 		// Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("overview").setIndicator("Overview",
+	    spec = tabHost.newTabSpec("overview").setIndicator("overview",
 	                      res.getDrawable(R.drawable.ic_tab_artists))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 	    
 	    // Do the same for the other tabs
-	    intent = new Intent().setClass(this, AddTransactionActivity.class);
+	    intent = new Intent().setClass(this, TabGroup1Activity.class);
 	    spec = tabHost.newTabSpec("newTransaction").setIndicator("New",
 	                      res.getDrawable(R.drawable.ic_tab_artists))
 	                  .setContent(intent);
@@ -48,11 +53,16 @@ public class Home extends TabActivity	{
 	    
 	    // To set add transaction as default tab 
 	    tabHost.setCurrentTab(1) ;
-		
+	    tabHost1 = tabHost;
 	    
-		
-		
 	}
+		
+	/*public void switchTab(int tab, Intent intent){
+	
+		tabHost1.setCurrentTab(tab);
+		
+	}*/
+	
 	
 
 }
