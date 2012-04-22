@@ -29,7 +29,7 @@ public class Home extends TabActivity	{
 		Intent intent ;
 		
 		// Create an Intent to launch an ActivityGroup for the tab (to be reused)
-	    intent = new Intent().setClass(this, TabGroup2Activity.class);
+	    intent = new Intent().setClass(this, FinalOverviewActivity.class);
 		
 		// Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("overview").setIndicator("overview",

@@ -168,4 +168,19 @@ private static final String TAG = "OverviewDbAdapter" ;
 	    	return amt;
 		}
 		
+		/*
+		 * AppUserInfo(): returns all the rows of overview table that have the user of the application as one of the participant.
+		 * i.e. It plays a key role in determining which users need to be taken care of by the app user
+		 * Return type: cursor containing list of rows having user as one participant
+		 * PS: The app user is identified as a user having id = "0"
+		 */
+		
+		public Cursor AppUserInfo()	{
+			
+			String userId = "0";
+			String selection = KEY_USERID1 + "=" + userId;
+			Cursor c =  mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_USERID1, KEY_USERID2, KEY_AMOUNT}, selection, null, null, null, null);
+			return c;
+		}
+		
 }

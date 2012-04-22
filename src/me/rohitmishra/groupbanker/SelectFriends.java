@@ -1,29 +1,21 @@
 package me.rohitmishra.groupbanker;
 	
-import java.util.ArrayList;
 import java.util.HashSet;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.FilterQueryProvider;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 
@@ -51,7 +43,7 @@ public class SelectFriends extends ListActivity{
 	 */
 	//static ArrayList<Boolean> checkedStates = new ArrayList<Boolean>();
 	static HashSet<String> selectedIds = new HashSet<String>();
-	//static HashSet<Integer> selectedLines = new HashSet<Integer>();
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {  
@@ -68,12 +60,7 @@ public class SelectFriends extends ListActivity{
 		
 		listView = getListView();
 		
-		//mDbHelper = new FriendsDbAdapter(this);
-	  
-		// mDbHelper.open() ;
-     
-		//Log.v(TAG, "database opened") ;
-      
+		
 		Cursor c = application.getFriendsDbAdapter().fetchAllFriends();
         startManagingCursor(c);
       
