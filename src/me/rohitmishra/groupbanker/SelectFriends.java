@@ -215,6 +215,7 @@ public class SelectFriends extends ListActivity{
 		public void onStart()	{
 			super.onStart();
 			Log.v("TAG", "In onStart of SelectFriends");
+			selectedIds.clear();
 		}
 	  
 	  @Override

@@ -47,7 +47,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		
-		mTransactionDbHelper = mApplication.getTransDbAdapter();
+		mTransactionDbHelper = new TransactionDbAdapter(this);
+		mTransactionDbHelper.open();
 		
 		detailsHelper = new DetailsDbAdapter(this);
 		detailsHelper.open();
@@ -408,14 +409,6 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		Log.v("TAG", "In onStart of FinishTransactionActivity");
 	}
 	
-	/*public void switchTabInActivity(int indexTabToSwitchTo, Intent intent)	{
-		Home parentActivity = (Home)this.getParent().getParent();
-		parentActivity.switchTab(indexTabToSwitchTo);
-		
-		TabGroupActivity parentActivity1 = (TabGroupActivity)getParent();
-		parentActivity1.startChildActivity("OverView", intent);
-		
-		//this.finish();
-	}*/
+	
 
 }
