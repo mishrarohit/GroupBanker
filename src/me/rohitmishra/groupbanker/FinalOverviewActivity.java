@@ -2,9 +2,9 @@ package me.rohitmishra.groupbanker;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,12 +22,29 @@ public class FinalOverviewActivity extends Activity{
      private String friendId;
      private String friendName;
      private double amount;
-     private TextView[] rowView;
+     private TextView rowView;
+     TextView[] transactions;
      
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        application = (GroupBankerApplication) getApplication();
+        
+        Log.v("TAG", "In onCreate of finalOverviewActivity");
+  }
+	
+	public int getId()	{
+		mID = mID + 1 ;
+		return mID ;
+	}
+	
+	public void onPause()	{
+		super.onPause();
+		Log.v("TAG", "In onPause() of FinalOverviewActivity");
+	}
+	
+	public void onResume()	{
+		super.onResume();
+		Log.v("TAG", "In onResume() of FinalOverviewActivity");
+		application = (GroupBankerApplication) getApplication();
         username = application.getUserName();
                 
         //initialising the database helper variables
@@ -43,6 +60,7 @@ public class FinalOverviewActivity extends Activity{
         startManagingCursor(c);
         length = c.getCount();
         
+        Log.v("TAG", "The number of rows in cursor in finalOverview = " + length);        
         //dynamic layout
         
         ScrollView scrollView = new ScrollView(this);
@@ -60,14 +78,26 @@ public class FinalOverviewActivity extends Activity{
 			
 		relativeLayout.addView(mDescription, paramsDescription);
 		
-		rowView = new TextView[length];
+		transactions = new TextView[length];
+		
 		int i = 0;
 		//fetching all other friends involved in the transaction
-		c.moveToFirst();
+		if(!c.moveToFirst())	{
+			
+			Log.v("TAG", "cursor empty!");
+			//it means that the cursor is empty. Setting the activity to default view
+			TextView textview = new TextView(this);
+	        textview.setText("This is the Overview tab");
+	        setContentView(textview);
+		}
 		
+		else	{
 		//iterate till the cursor is empty
 		
 	   do {
+		   
+		   rowView = new TextView(this);
+		   rowView.setId(getId());
 		  
 		  friendId = c.getString(c.getColumnIndex(overviewDbAdapter.KEY_USERID2));
 		  
@@ -76,39 +106,43 @@ public class FinalOverviewActivity extends Activity{
 		  amount = c.getDouble(c.getColumnIndex(overviewDbAdapter.KEY_AMOUNT));
 		  
 		  if(amount > 0){
-			  rowView[i].setText(friendName + " +" + amount);
+			  rowView.setText(friendName + " +" + amount);
 		  }
 		  
 		  else	{
 			  
-			  rowView[i].setText(friendName + " " +  amount);
+			  rowView.setText(friendName + " " +  amount);
 		  }
 		  
-		  rowView[i].setId(getId());
-		  rowView[i].setPadding(10, 30, 60, 0);
+		  rowView.setId(getId());
+		  rowView.setPadding(10, 30, 60, 0);
+		  
 			
 		  final RelativeLayout.LayoutParams paramsTextView = 
 					new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		  
+		  paramsTextView.addRule(RelativeLayout.ALIGN_LEFT);
 		  
 		  if ( i == 0)	{
 				paramsTextView.addRule(RelativeLayout.BELOW, mDescription.getId());
 			}
 		  
 		  else	{
-			  paramsTextView.addRule(RelativeLayout.BELOW, rowView[i-1].getId());
+			  paramsTextView.addRule(RelativeLayout.BELOW, transactions[i-1].getId());
 		  }
-			  
+		  
+		 relativeLayout.addView(rowView, paramsTextView);
+		 transactions[i] = rowView;
+		 i++;
+		 
 	   }while(c.moveToNext());
+	   
+	   this.setContentView(scrollView) ;
 	   
 	   friendsHelper.close();
 	   overviewHelper.close();
 		
-       
-    }
-	
-	public int getId()	{
-		mID = mID + 1 ;
-		return mID ;
+	}
 	}
 	
 }
