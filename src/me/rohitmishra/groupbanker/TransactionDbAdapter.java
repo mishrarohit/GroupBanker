@@ -111,7 +111,8 @@ private static final String TAG = "TransactionDbAdapter" ;
 	    
 	    public Cursor fetchAllTransactions() {
 	    	
-	    	return mDb.query(TABLE_NAME,new String[] {KEY_AMOUNT, KEY_DESC,KEY_TIME}, null, null, null, null, null);
+	    	String orderby = KEY_ROWID;
+	    	return mDb.query(TABLE_NAME,new String[] {KEY_AMOUNT, KEY_DESC,KEY_TIME}, null, null, null, null, orderby);
 	    }
 	    
   //TODO implement fetchTransaction (specific), delete and update transaction is needed!!	    

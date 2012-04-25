@@ -70,6 +70,9 @@ public class FinalOverviewActivity extends Activity{
 		//first line
 		mDescription = new TextView(this);
 		mDescription.setText("Overview of " + username + "'s transactions:");
+		mDescription.setGravity(1);
+		mDescription.setTextSize(15);
+		mDescription.setTypeface(null, 1);
 		mDescription.setId(mID);
 		
 		final RelativeLayout.LayoutParams paramsDescription = 

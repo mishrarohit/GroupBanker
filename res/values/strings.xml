@@ -34,4 +34,8 @@
     <string name="finish_question">Who paid how much money</string>
     <string name="finishTransaction">Finish Transaction</string>
     <string name="newTransaction">New Transaction</string>
+    <string name="transHistory">Transaction History</string>
+    <string name="description">Description</string>
+    <string name="amount">Amount</string>
+    <string name="dateTime">Date-Time</string>
 </resources>
