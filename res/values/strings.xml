@@ -38,4 +38,5 @@
     <string name="description">Description</string>
     <string name="amount">Amount</string>
     <string name="dateTime">Date-Time</string>
+    <string name="paidHint">Enter an amount </string>
 </resources>
