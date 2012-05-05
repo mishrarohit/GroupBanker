@@ -2,32 +2,39 @@ package me.rohitmishra.groupbanker;
 
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-public class FinalOverviewActivity extends Activity{
+public class FinalOverviewActivity extends ListActivity{
 	
 	 GroupBankerApplication application ;
-     private overviewDbAdapter overviewHelper;
-     private FriendsDbAdapter friendsHelper;
+     private overviewDbAdapter mOverviewHelper;
+    // private FriendsDbAdapter friendsHelper;
      private static final String TAG = "FinalOverviewActivity";
      private String username;
      private int length;
-     private TextView mDescription;
+    // private TextView mDescription;
      private int mID = 78965 ;
-     private String friendId;
-     private String friendName;
-     private double amount;
-     private TextView rowView;
-     TextView[] transactions;
+   //  private String friendId;
+   //  private String friendName;
+   //  private double amount;
+   //  private TextView rowView;
+   //  TextView[] transactions;
+     static ListView listView ;
+     private TextView overviewHeader ;
+     private Context context ;
+     private FinalOverviewAdapter adapter ;
      
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        setContentView(R.layout.finaloverview) ;
         Log.v("TAG", "In onCreate of finalOverviewActivity");
   }
 	
@@ -45,22 +52,44 @@ public class FinalOverviewActivity extends Activity{
 		super.onResume();
 		Log.v("TAG", "In onResume() of FinalOverviewActivity");
 		application = (GroupBankerApplication) getApplication();
+		context = this.getApplicationContext() ;
         username = application.getUserName();
                 
         //initialising the database helper variables
-        overviewHelper = new overviewDbAdapter(this);
-        friendsHelper = new FriendsDbAdapter(this);
+        mOverviewHelper = new overviewDbAdapter(this);
+        //friendsHelper = new FriendsDbAdapter(this);
         
         //fetching the details of the user's transit
         
-        overviewHelper.open();
-        friendsHelper.open();
+        mOverviewHelper.open();
+        //friendsHelper.open();
         
-        Cursor c = overviewHelper.AppUserInfo();
+        Cursor c = mOverviewHelper.AppUserInfo();
         startManagingCursor(c);
         length = c.getCount();
         
-        Log.v("TAG", "The number of rows in cursor in finalOverview = " + length);        
+        Log.v("TAG", "The number of rows in cursor in finalOverview = " + length);
+        
+        overviewHeader = (TextView)findViewById(R.id.overviewheader);
+        overviewHeader.setText("Overview of " + username + "\'s expenses") ;
+        
+        listView = getListView() ;
+        
+        String[] from = new String[] {mOverviewHelper.KEY_USERID2, mOverviewHelper.KEY_AMOUNT};
+        int[] to = new int[] { R.id.friendName, R.id.amount } ;
+        
+        // Now initialize the  adapter and set it to display using our row
+        adapter =
+    	   new FinalOverviewAdapter(this, R.layout.finaloverviewrow, c, from, to);
+        
+        setListAdapter(adapter);
+        
+        listView.setItemsCanFocus(true);
+        
+        
+        
+       
+        /*
         //dynamic layout
         
         ScrollView scrollView = new ScrollView(this);
@@ -111,9 +140,7 @@ public class FinalOverviewActivity extends Activity{
 		  if(amount > 0){
 			  rowView.setText(friendName + " +" + amount);
 		  }
-		  
 		  else	{
-			  
 			  rowView.setText(friendName + " " +  amount);
 		  }
 		  
@@ -146,6 +173,10 @@ public class FinalOverviewActivity extends Activity{
 	   overviewHelper.close();
 		
 	}
+	*/
+       
+	mOverviewHelper.close();
 	}
+	
 	
 }

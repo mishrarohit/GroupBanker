@@ -1,5 +1,7 @@
 package me.rohitmishra.groupbanker;
 
+import java.text.DecimalFormat;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -50,6 +52,15 @@ public class GroupBankerApplication extends Application {
 		this.userName = mPrefs.getString("username", null);
 		Log.v(TAG, "Username Getting returned:" + this.userName);
 		return this.userName;
+	}
+	
+	/*
+	 * For truncating amount to 2 digits after decimal point.
+	 */
+	public double roundTwoDecimals(double d)
+	{
+	    DecimalFormat twoDForm = new DecimalFormat("#.##");
+		return Double.valueOf(twoDForm.format(d));
 	}
 	
 }
