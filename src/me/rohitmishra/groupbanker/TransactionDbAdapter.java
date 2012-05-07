@@ -146,6 +146,7 @@ private static final String TAG = "TransactionDbAdapter" ;
 	    	return time ;
 	    	}
 	    }
+	 
 	    
   //TODO implement fetchTransaction (specific), delete and update transaction is needed!!	    
 }

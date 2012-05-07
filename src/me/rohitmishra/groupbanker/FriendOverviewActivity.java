@@ -6,13 +6,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 
 
-public class FriendOverviewActivity extends Activity {
+public class FriendOverviewActivity extends Activity implements OnClickListener{
 	
 	private static final String TAG = "FriendOverview";
 	private GroupBankerApplication mApplication ;
@@ -82,8 +84,18 @@ public class FriendOverviewActivity extends Activity {
        
 		friendOverviewList.setAdapter(adapter);
 		
+		friendTransaction.setOnClickListener(this);
 	
 		mInfoHelper.close();
+	}
+
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(getApplicationContext(), DirectTransactionActivity.class);
+		intent.putExtra("userID1", mUserID1);
+		intent.putExtra("userID2", mUserID2);
+		startActivity(intent);
+		
 	}
 	
 	

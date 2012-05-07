@@ -256,7 +256,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		for(i=0; i<selectedIds.length; i++){
 					
 					floatVal = Float.valueOf(paid[i].getText().toString());
-					sum += floatVal;
+					sum += floatVal
+					;
 				}
 				
 		if (sum != amount1)

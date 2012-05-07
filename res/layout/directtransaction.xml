@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+     >
+     
+	<TextView
+	    android:id="@+id/friend"
+	    android:layout_width = "fill_parent"
+	    android:layout_height="wrap_content" />
+	
+	<ToggleButton
+	    android:id="@+id/toggleButton"
+	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textOn="Pay"
+		android:textOff="Receive"
+		android:onClick="onToggleClicked"	/>
+	
+	<EditText
+	    android:id="@+id/desc"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="@string/description_hint"
+	    android:inputType="text"
+	    />
+	
+	<EditText
+	    android:id="@+id/amount"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="@string/amount_hint"
+	    android:inputType="numberDecimal"
+	    />
+	
+	<Button
+	    android:id="@+id/buttondone"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/done" />
+</LinearLayout>
