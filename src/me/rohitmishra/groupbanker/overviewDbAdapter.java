@@ -92,7 +92,7 @@ private static final String TAG = "OverviewDbAdapter" ;
     	ContentValues initialValues = new ContentValues();
     	initialValues.put(KEY_USERID1, userId1);
     	initialValues.put(KEY_USERID2, userId2);
-    	initialValues.put(KEY_AMOUNT, amount);
+    	initialValues.put(KEY_AMOUNT, java.lang.Math.floor(amount));
     			    	
     	return mDb.insert(TABLE_NAME, null, initialValues) ;
     }
@@ -132,7 +132,7 @@ private static final String TAG = "OverviewDbAdapter" ;
 	    	amt = previousAmt + amt;
 	    	Log.v(TAG, "The updated amount value = " + amt);
 	    	ContentValues args = new ContentValues();
-	        args.put(KEY_AMOUNT, amt);
+	        args.put(KEY_AMOUNT, java.lang.Math.floor(amt));
 	        mDb.update(TABLE_NAME, args,  selection, new String[] {userId1, userId2});
 	        long id = c.getLong(c.getColumnIndexOrThrow(KEY_ROWID));
 	        c.close();

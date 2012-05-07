@@ -195,7 +195,11 @@ public class FinalOverviewActivity extends ListActivity{
 		intent.putExtra("userID1", "0");
 		intent.putExtra("userID2", userID);
 		intent.putExtra("doubleAmount", doubleAmount);
-		startActivity(intent);		
+		
+		//starting the new activity in the same tab
+		TabGroupActivity parentActivity1 = (TabGroupActivity)getParent();
+		parentActivity1.startChildActivity("FriendOverviewActivity", intent);
+		//startActivity(intent);		
 	}
 	
 	

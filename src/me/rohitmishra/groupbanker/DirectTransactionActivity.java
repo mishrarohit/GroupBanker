@@ -27,7 +27,7 @@ public class DirectTransactionActivity extends Activity implements OnClickListen
 	private String mUserID2 ;
 	private Context mContext ;
 	private Bundle bundle ;
-	private int mFlag ;
+	private int mFlag = -1 ;
 	
 	private TextView mFriendName ;
 	private ToggleButton mToggle ;
@@ -113,9 +113,15 @@ public class DirectTransactionActivity extends Activity implements OnClickListen
 			
 			int transID =(int)mTransactionHelper.createTransaction(fAmount, desc, formatted);
 
-			if (mFlag == 1){
+			if (mFlag == -1){
 				fAmount = -(fAmount);
 			}
+			
+			else
+			{
+				fAmount = java.lang.Math.abs(fAmount);
+			}
+				
 			
 			int user1 = Integer.valueOf(mUserID1);
 			int user2 = Integer.valueOf(mUserID2);
@@ -141,7 +147,9 @@ public class DirectTransactionActivity extends Activity implements OnClickListen
 	                 Toast.LENGTH_LONG).show();
 			
 			Intent intent = new Intent(getApplicationContext(), FinalOverviewActivity.class);
-			startActivity(intent);
+			TabGroupActivity parentActivity1 = (TabGroupActivity)getParent();
+			parentActivity1.startChildActivity("FinalOveriewActivity", intent);
+			//startActivity(intent);
 		}
 		
 	}

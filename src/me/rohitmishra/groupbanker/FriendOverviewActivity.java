@@ -94,7 +94,9 @@ public class FriendOverviewActivity extends Activity implements OnClickListener{
 		Intent intent = new Intent(getApplicationContext(), DirectTransactionActivity.class);
 		intent.putExtra("userID1", mUserID1);
 		intent.putExtra("userID2", mUserID2);
-		startActivity(intent);
+		TabGroupActivity parentActivity1 = (TabGroupActivity)getParent();
+		parentActivity1.startChildActivity("DirectTransactionActivity", intent);
+		//startActivity(intent);
 		
 	}
 	
