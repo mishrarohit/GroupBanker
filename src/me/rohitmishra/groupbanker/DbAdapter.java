@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DbAdapter {
 	
-	private static final String TAG = "FriendsDbAdapter" ;
+	private static final String TAG = "DbAdapter" ;
 	
 	public static final String DATABASE_NAME = "groupbanker" ;
 	public static final int DATABASE_VERSION = 1;
@@ -44,6 +44,17 @@ public class DbAdapter {
 			"FOREIGN KEY(transID) REFERENCES trans(_id), " +
 			"FOREIGN KEY(fbid) REFERENCES friends(fbid));" ;
 	
+	//create table string for info 
+	
+	private static final String CREATE_TABLE_INFO = 
+		"create table info (_id integer primary key autoincrement, " +
+		"transID integer not null, userID1 integer not null, userID2 integer not null, amount real, " +
+		"FOREIGN KEY(transID) REFERENCES trans(_id)," +
+		"FOREIGN KEY(userID1) REFERENCES friends(fbid), " +
+		"FOREIGN KEY(userID2) REFERENCES friends(fbid));" ;
+	
+	
+	
 	 private final Context context; 
 	 private DatabaseHelper DBHelper;
 	 private SQLiteDatabase db;
@@ -72,6 +83,7 @@ public class DbAdapter {
 	            db.execSQL(CREATE_TABLE_TRANS);
 	            db.execSQL(CREATE_TABLE_OVERVIEW);
 	            db.execSQL(CREATE_TABLE_DETAILS);
+	            db.execSQL(CREATE_TABLE_INFO);
 	        }
 	        
 	        @Override
@@ -84,6 +96,7 @@ public class DbAdapter {
 	            db.execSQL("DROP TABLE IF EXISTS trans");
 	            db.execSQL("DROP TABLE IF EXISTS overview");
 	            db.execSQL("DROP TABLE IF EXISTS details");
+	            db.execSQL("DROP TABLE IF EXISTS info");
 	            onCreate(db);
 	        }
 	    } 

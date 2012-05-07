@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-public class FinalOverviewAdapter extends SimpleCursorAdapter{
-	private static final String TAG = "FinalOverviewAdapter";
+public class FriendOverviewAdapter extends SimpleCursorAdapter{
+	private static final String TAG = "FriendOverviewAdapter";
 	private final Context context ;
 	private final String[] values ;
 	private final int[] to ;
@@ -19,18 +19,19 @@ public class FinalOverviewAdapter extends SimpleCursorAdapter{
 	private final LayoutInflater mInflater ;
 	//private FriendsDbAdapter mFriendsDbHelper;
 	protected Cursor mCursor;
-	private String friendId ; 
-	private String friendName ;
+	private String transID ; 
+	private String transName ;
 	private Double doubleAmount ;
 	private String amount ;
 	
 	static class ViewHolder	{
-		public TextView friendName ;
+		public TextView timestamp ;
+		public TextView transactionName ;
 		public ImageView statusImage ;
 		public TextView amount ;
 	}
 	
-	public FinalOverviewAdapter(Context context, int layout, Cursor c,
+	public FriendOverviewAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
 		super(context, layout, c, from, to);
 		this.context = context ;
@@ -58,7 +59,8 @@ public class FinalOverviewAdapter extends SimpleCursorAdapter{
 	        rowView = mInflater.inflate(layout, parent, false);
 	        Log.d(TAG, "rowView inflated. rowView = " + rowView);
 	        viewHolder = new ViewHolder() ;
-	        viewHolder.friendName = (TextView) rowView.findViewById(R.id.friendName) ;
+	        viewHolder.timestamp = (TextView) rowView.findViewById(R.id.timestamp);
+	        viewHolder.transactionName = (TextView) rowView.findViewById(R.id.transactionName) ;
 	        viewHolder.statusImage = (ImageView) rowView.findViewById(R.id.statusImage) ;
 	        viewHolder.amount = (TextView) rowView.findViewById(R.id.amount);
 	        rowView.setTag(viewHolder);
@@ -66,12 +68,18 @@ public class FinalOverviewAdapter extends SimpleCursorAdapter{
 	    
 	    viewHolder = (ViewHolder) rowView.getTag();
 	    
-	    friendId = cursor.getString(cursor.getColumnIndex(overviewDbAdapter.KEY_USERID2));
+	    transID = cursor.getString(cursor.getColumnIndex(InfoDbAdapter.KEY_TRANSID));
 		  
-	    //fetching the name of the friend extracted from the overview table in the friends table
-		friendName = ((GroupBankerApplication) context.getApplicationContext())
-        .getFriendsDbAdapter().fetchFriendName(friendId);
-		viewHolder.friendName.setText(friendName);
+	    //fetching the transaction timestamp from the transaction table
+		String transTimestamp = ((GroupBankerApplication) context.getApplicationContext())
+        .getTransDbAdapter().fetchTransactionTime(transID);
+		viewHolder.timestamp.setText(transTimestamp);
+		
+		//fetching the transaction description from the transaction table
+		String transDesc = ((GroupBankerApplication) context.getApplicationContext())
+        .getTransDbAdapter().fetchTransactionDesc(transID);
+		viewHolder.transactionName.setText(transDesc);
+		
 		
 		doubleAmount = cursor.getDouble(cursor.getColumnIndex(overviewDbAdapter.KEY_AMOUNT));
 		

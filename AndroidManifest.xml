@@ -79,25 +79,31 @@
         </activity>
         
         <activity
-            android:name="TabGroupActivity"
+            android:name=".TabGroupActivity"
             android:label="@string/app_name" >
            
         </activity>
         
          <activity
-            android:name="TabGroup1Activity"
+            android:name=".TabGroup1Activity"
             android:label="@string/app_name" >
            
         </activity>
         
           <activity
-            android:name="TabGroup2Activity"
+            android:name=".TabGroup2Activity"
             android:label="@string/app_name" >
            
         </activity>
         
           <activity
-            android:name="FinalOverviewActivity"
+            android:name=".FinalOverviewActivity"
+            android:label="@string/app_name" >
+           
+        </activity>
+        
+         <activity
+            android:name=".FriendOverviewActivity"
             android:label="@string/app_name" >
            
         </activity>

@@ -1,7 +1,5 @@
 package me.rohitmishra.groupbanker;
 
-import java.text.DecimalFormat;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

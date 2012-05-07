@@ -6,7 +6,7 @@
     <string name="error">Error</string>
     <string name="facebook_error">Facebook Error: </string>
     <string name="api_response">Api Response:</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait &#8230;</string>
     <string name="source_tag">Source tag:</string>
     <string name="permission_source_tag">Source tag: \"perms_tag\"</string>
     <string name="yes">Yes</string>
@@ -42,4 +42,5 @@
     <string name="finaloverview">Overview of your expenses</string>
     <string name="overviewempty">Woohoo ! Everything is squared up. </string>
     <string name="overviewarrow">Determines whether you have to pay or take payment from a friend</string>
+    <string name="friendTransaction">Create friend-only transaction</string>
 </resources>

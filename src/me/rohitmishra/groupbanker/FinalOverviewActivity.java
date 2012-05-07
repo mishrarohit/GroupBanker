@@ -4,13 +4,16 @@ package me.rohitmishra.groupbanker;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FinalOverviewActivity extends ListActivity{
 	
@@ -85,6 +88,8 @@ public class FinalOverviewActivity extends ListActivity{
         setListAdapter(adapter);
         
         listView.setItemsCanFocus(true);
+        
+        
         
         
         
@@ -176,6 +181,21 @@ public class FinalOverviewActivity extends ListActivity{
 	*/
        
 	mOverviewHelper.close();
+	}
+	
+	@Override	
+	protected void onListItemClick(ListView parent, View v, int position, long id) {
+		
+		// Get the userID of the friend whose name has been clicked on 
+		
+		Cursor tempCursor = (Cursor)parent.getItemAtPosition(position);
+		String userID = tempCursor.getString(tempCursor.getColumnIndex(mOverviewHelper.KEY_USERID2));
+		Double doubleAmount = tempCursor.getDouble(tempCursor.getColumnIndex(mOverviewHelper.KEY_AMOUNT));
+		Intent intent = new Intent(getApplicationContext(), FriendOverviewActivity.class);
+		intent.putExtra("userID1", "0");
+		intent.putExtra("userID2", userID);
+		intent.putExtra("doubleAmount", doubleAmount);
+		startActivity(intent);		
 	}
 	
 	

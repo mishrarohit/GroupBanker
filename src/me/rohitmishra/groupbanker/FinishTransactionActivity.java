@@ -29,6 +29,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	private TransactionDbAdapter mTransactionDbHelper;
 	private DetailsDbAdapter detailsHelper;
 	private overviewDbAdapter overviewHelper;
+	private InfoDbAdapter mInfoDbAdapter ;
 	private String description;
 	private String amount;
 	private float amount1;
@@ -57,6 +58,9 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		
 		overviewHelper = new overviewDbAdapter(this);
 		overviewHelper.open();
+		
+		mInfoDbAdapter = new InfoDbAdapter(this);
+		mInfoDbAdapter.open();
 		
 		description = bundle.getString("description");
 		overviewBundle.putString("description", description);
@@ -338,12 +342,14 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		}
 		
 		 //sending the sorted array to update the overview table
-		updateOverview(userId, diff);	 
+		updateOverview(userId, diff, lastId);	 
 		 				
 		 Toast.makeText(getApplicationContext(), "Transaction successfully saved",
                  Toast.LENGTH_LONG).show();
 		mTransactionDbHelper.close();
 		detailsHelper.close();
+		mInfoDbAdapter.close();
+		
 		Log.v("TAG", "starting activity overview");
 		Intent intent = new Intent(getApplicationContext(), OverviewActivity.class);
 		intent.putExtras(overviewBundle);
@@ -393,7 +399,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 	}
 	
 	//function definition for updateOverview
-	public void updateOverview(String userId[], float diff[])	{
+	public void updateOverview(String userId[], float diff[], int transID)	{
 		
 		int l = selectedIds.length; 	//last index of the arrays
 		int f = 0, i = 0;    					//first index of the array
@@ -447,8 +453,14 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 				amount = -(amount);
 			}
 			
+			// Adding the data to the info table 
+			
+			mInfoDbAdapter.createInfo(transID, user1, user2, amount);
+			
 			Log.v(TAG, "Value going in overview update function user1:" + user1 + "user2:" + user2 + "amount:" + amount);
-		//updating the overview table
+		
+			//updating the overview table
+			
 			overviewIds[i] = overviewHelper.updateAmount(user1, user2, amount);
 			Log.v(TAG, "id returned from update:" + overviewIds[i]);
 			i++;

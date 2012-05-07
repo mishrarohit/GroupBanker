@@ -115,5 +115,37 @@ private static final String TAG = "TransactionDbAdapter" ;
 	    	return mDb.query(TABLE_NAME,new String[] {KEY_AMOUNT, KEY_DESC,KEY_TIME}, null, null, null, null, orderby);
 	    }
 	    
+	    public String fetchTransactionDesc(String selectedID) throws SQLException	{
+	    	String selection = KEY_ROWID + " = " + selectedID ;
+	    	Cursor c = mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_DESC}, selection, null, null, null, null);
+	    	if(!c.moveToFirst())	{
+	    		
+	    		c.close();
+	    		return "0";
+	    	}
+	    	else {
+	    	Log.d(TAG, "fetchFriendName cursor count = " + c.getCount());
+	    	String desc =  c.getString(c.getColumnIndexOrThrow(KEY_DESC));
+	    	c.close();
+	    	return desc ;
+	    	}
+	    }
+	    
+	    public String fetchTransactionTime(String selectedID) throws SQLException	{
+	    	String selection = KEY_ROWID + " = " + selectedID ;
+	    	Cursor c = mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_TIME}, selection, null, null, null, null);
+	    	if(!c.moveToFirst())	{
+	    		
+	    		c.close();
+	    		return "0";
+	    	}
+	    	else {
+	    	Log.d(TAG, "fetchFriendName cursor count = " + c.getCount());
+	    	String time =  c.getString(c.getColumnIndexOrThrow(KEY_TIME));
+	    	c.close();
+	    	return time ;
+	    	}
+	    }
+	    
   //TODO implement fetchTransaction (specific), delete and update transaction is needed!!	    
 }
