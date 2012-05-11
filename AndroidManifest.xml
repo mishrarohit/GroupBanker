@@ -4,13 +4,16 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="8" 
+        android:targetSdkVersion="15"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission  android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:name="me.rohitmishra.groupbanker.GroupBankerApplication"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" android:debuggable="true">
+        android:label="@string/app_name" 
+        android:theme="@style/LightThemeSelector"
+        android:debuggable="true">
         <activity
             android:name=".GroupBankerActivity"
             android:label="@string/app_name" >
