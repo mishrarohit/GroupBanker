@@ -24,7 +24,7 @@
             android:gravity="center"
             android:text="@string/description"
             android:textStyle="normal|bold"
-            android:textColor="#FFFFFF">
+            >
         </TextView>
 
         <TextView android:id="@+id/column2"
@@ -33,7 +33,6 @@
             android:gravity="center"
             android:text="@string/amount"
             android:textStyle="normal|bold"
-            android:textColor="#FFFFFF"
             android:layout_toRightOf="@+id/column1">
         </TextView>
         
@@ -43,7 +42,6 @@
             android:gravity="center"
             android:text="@string/dateTime"
             android:textStyle="normal|bold"
-            android:textColor="#FFFFFF"
             android:layout_toRightOf="@+id/column2">
         </TextView>
     </RelativeLayout>
