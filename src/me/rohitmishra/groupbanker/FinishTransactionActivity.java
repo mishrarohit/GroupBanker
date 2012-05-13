@@ -75,19 +75,38 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		RelativeLayout relativeLayout = new RelativeLayout(this) ;
 		scrollView.addView(relativeLayout);
 		
+		
+		TextView formTitle = new TextView(this) ;
+		formTitle.setId(getId());
+		formTitle.setText(R.string.finish_question);
+		//formTitle.setPadding(20, 10, 10, 10);
+		formTitle.setTextSize(20);
+		formTitle.setGravity(50);
+		
+		
+		final RelativeLayout.LayoutParams paramsFormTitle = 
+			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		//paramsFormTitle.addRule(RelativeLayout.BELOW, mAmount.getId());
+		
+		relativeLayout.addView(formTitle, paramsFormTitle);
+		
 		mDescription = new TextView(this);
 		
 		mAmount = new TextView(this);
 		
 		mDescription.setText(description);
+		//mDescription.setPadding(20, 10, 10, 10);
+		mDescription.setTextSize(15);
 		mDescription.setId(mID);	// Set a random id for alignment 
 		
 		mAmount.setText("Amount = Rs. " + amount);
+		//mAmount.setPadding(20, 10, 10, 20);
+		mAmount.setTextSize(15);
 		mAmount.setId(getId());
 		
 		final RelativeLayout.LayoutParams paramsDescription = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsDescription.addRule(RelativeLayout.ALIGN_LEFT);
+		paramsDescription.addRule(RelativeLayout.BELOW, formTitle.getId());
 		
 		
 		final RelativeLayout.LayoutParams paramsAmount = 
@@ -100,15 +119,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		relativeLayout.addView(mAmount, paramsAmount);
 		
 		
-		TextView formTitle = new TextView(this) ;
-		formTitle.setId(getId());
-		formTitle.setText(R.string.finish_question);
 		
-		final RelativeLayout.LayoutParams paramsFormTitle = 
-			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsFormTitle.addRule(RelativeLayout.BELOW, mAmount.getId());
-		
-		relativeLayout.addView(formTitle, paramsFormTitle);
 		
 		/* Set up a separate textview and edittext for the user 
 		 * We are getting username from GroupBankerApplication

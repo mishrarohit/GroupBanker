@@ -7,12 +7,7 @@
 	   >
 	   
 	 <TextView android:text="@string/transHistory"
-	     android:gravity="center_vertical|center_horizontal"
-	     android:layout_width="fill_parent"
-	     android:layout_height="wrap_content"
-	     android:textStyle="bold"
-	     android:layout_marginBottom="5dip" 
-	     android:textSize="18dip" />"
+	     style= "@style/heading" />"
 	 
 	 <RelativeLayout android:id="@+id/ColumnHeading"
         android:layout_width="fill_parent"

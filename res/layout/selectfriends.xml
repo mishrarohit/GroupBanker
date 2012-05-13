@@ -9,18 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 	    <TextView 
+	        style = "@style/heading"
 	        android:id="@+id/selectfriends"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
 	        android:text="@string/selectfriends" >
 	    </TextView>
 	    
 	    <Button
+	        style="@style/buttonStyle"
 	        android:id="@+id/buttondone"
 	        android:text="@string/done"
-	        android:layout_toRightOf="@id/selectfriends"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" >	    
+	        android:layout_below="@id/selectfriends">	    
 	   </Button>
 	</RelativeLayout>
         
