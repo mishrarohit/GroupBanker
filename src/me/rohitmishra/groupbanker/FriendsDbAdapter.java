@@ -17,7 +17,7 @@ public class FriendsDbAdapter {
 	public static final String KEY_ROWID = "_id";
 	public static final String KEY_FBID = "fbid";
 	public static final String KEY_NAME = "name";
-	public static final String KEY_IMAGEURI = "imageuri" ;
+	// public static final String KEY_IMAGEURI = "imageuri" ;
 	
 	public DatabaseHelper mDbHelper ;
 	public SQLiteDatabase mDb ;
@@ -85,15 +85,15 @@ public class FriendsDbAdapter {
      * 
      *  @param fbid the fbid of the friend
      *  @param name the name of the friend
-     *  @param imageuri the uri of the friend's image
+     *  @param (disabled now) imageuri the uri of the friend's image 
      *  @return rowId or -1 if failed
      */
     
-    public long createFriend(String fbid, String name, String imageuri)	{
+    public long createFriend(String fbid, String name)	{
     	ContentValues initialValues = new ContentValues();
     	initialValues.put(KEY_FBID, fbid);
     	initialValues.put(KEY_NAME, name);
-    	initialValues.put(KEY_IMAGEURI, imageuri);
+    //	initialValues.put(KEY_IMAGEURI, imageuri);
     	
     	return mDb.insert(TABLE_NAME, null, initialValues) ;
     }
@@ -109,7 +109,7 @@ public class FriendsDbAdapter {
     
     public Cursor fetchAllFriends() throws SQLException {
     	
-    	return mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, null, null, null, null, null);
+    	return mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME}, null, null, null, null, null);
     	
     }
     
@@ -118,7 +118,7 @@ public class FriendsDbAdapter {
     	Log.d(TAG, "fetchFriendsWithSelection called. constraint = " + constraint + 
     			" mDb = " + mDb );
     	String selection = KEY_NAME + " LIKE '%"+constraint+"%'";
-    	Cursor c =  mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, selection, null, null, null, null);
+    	Cursor c =  mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME}, selection, null, null, null, null);
     	Log.d(TAG, "fetchFriendsWithSelection Cursor = " + c + " has " + c.getCount()) ;
     	return c ;
     /*	} catch ( Exception e)	{
@@ -130,7 +130,7 @@ public class FriendsDbAdapter {
     
     public String fetchFriendName(String selectedID) throws SQLException	{
     	String selection = KEY_ROWID + " = " + selectedID ;
-    	Cursor c = mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME, KEY_IMAGEURI}, selection, null, null, null, null);
+    	Cursor c = mDb.query(TABLE_NAME,new String[] {KEY_ROWID, KEY_FBID, KEY_NAME}, selection, null, null, null, null);
     	if(!c.moveToFirst())	{
     		
     		c.close();

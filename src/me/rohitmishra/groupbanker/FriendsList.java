@@ -93,24 +93,27 @@ public class FriendsList extends Activity  {
 	            String stringUri ;
 
 	            //changing the max limit to 20. later change it to jsonArray.length()
-	            mProgressBar.setMax(20);
+	            mProgressBar.setMax(jsonArray.length());
 	            
 	            //changing the upper limit of the for loop to 5 in order to test the code. original:jsonArray.length()
-	            for (int i = 0; i < 20; i++)	{
+	            for (int i = 0; i < jsonArray.length(); i++)	{
 	            	
 	            	JSONObject jsonObject = jsonArray.getJSONObject(i) ;
 	            	name = jsonArray.getJSONObject(i).getString("name");
+	            	
+	            	/* Disabling picture code for now 
 	            	final String picURL = jsonObject.getString("pic_square");
 	            	Log.v(TAG, "We have url of picture  " +  picURL) ;
 	            	
 	            	// get StringURI from picURL 
 	            	stringUri = getUriFromURL(picURL, GroupBankerFriends, name) ;
+	            	*/
 	            	
 		           //getting fbid for the friend
 		            friendId = jsonArray.getJSONObject(i).getString("uid");
 		            	
 		           //storing the friend to the SQLite database using FriendsDbAdapter
-		            mDbHelper.createFriend(friendId, name, stringUri);
+		            mDbHelper.createFriend(friendId, name);
 		            Log.v(TAG, "createFriend called and friend created. i = " + i) ;	
 	            	
 		            publishProgress(i) ;

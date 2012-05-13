@@ -293,7 +293,7 @@ public class GroupBankerActivity extends Activity {
     	Log.v(TAG, "getFriends called") ;
     	dialog = ProgressDialog.show(GroupBankerActivity.this, "",
                 getString(R.string.please_wait), true, true);
-    	String query = "select name, current_location, uid, pic_square from user where uid in (select uid2 from friend where uid1=me()) order by name";
+    	String query = "select name, current_location, uid from user where uid in (select uid2 from friend where uid1=me()) order by name";
         Bundle params = new Bundle();
         params.putString("method", "fql.query");
         params.putString("query", query);
