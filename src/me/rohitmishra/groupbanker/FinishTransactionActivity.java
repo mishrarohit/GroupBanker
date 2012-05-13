@@ -133,24 +133,21 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 			rowEditText.setHint(R.string.paidHint);
 			
 			
+			
 			String name = mApplication.getFriendsDbAdapter().fetchFriendName(selectedIds[i]);
 			rowTextView.setText(name);
 			
-			//rowTextView.setMinimumWidth(50);
-			rowTextView.setPadding(10, 30, 60, 0);
-			
-		//	rowEditText.setMinWidth(200);
-			
+						
 			final RelativeLayout.LayoutParams paramsTextView = 
 				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+				paramsTextView.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 			
 			final RelativeLayout.LayoutParams paramsEditText = 
 					new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 				paramsEditText.addRule(RelativeLayout.RIGHT_OF, rowTextView.getId());
 				paramsEditText.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 				paramsEditText.addRule(RelativeLayout.ALIGN_TOP, rowTextView.getId());
-				paramsEditText.setMargins(2, 20, 2, 20);
-				
+								
 			
 			// The first TextView will be below userName TextView. Rest below names[i-1]
 			if ( i == 0)	{

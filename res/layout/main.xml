@@ -8,12 +8,12 @@
     
    <TextView 
      android:id="@+id/app_logo"
-     android:layout_width="wrap_content"
+     android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:text="@string/app_name"
      android:layout_alignParentTop="true"
      android:paddingTop="75dp"
-     android:paddingLeft="80dp"
+     android:gravity="center_vertical|center_horizontal"
      android:paddingBottom="20dp"
      android:textSize="35sp"
      android:textStyle="bold"
@@ -22,14 +22,11 @@
    
    <TextView 
        android:id="@+id/login_mesg"
-       android:layout_width="wrap_content"
+       android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:paddingLeft="50dp"
-       android:paddingRight="50dp"
        android:text="@string/login_msg"
        android:layout_below="@id/app_logo"
-       android:paddingTop="20dp"
-       android:paddingBottom="20dp"
+       android:gravity="center_vertical|center_horizontal"
        />
     	
    	 <me.rohitmishra.groupbanker.LoginButton
@@ -39,7 +36,7 @@
        android:src="@drawable/login_button"
        android:layout_alignParentBottom="true"
        android:paddingBottom="50dp"
-       android:paddingLeft="20dp"
+       android:paddingLeft="60dp"
        android:paddingRight="20dp"
         />	  	
    
