@@ -20,7 +20,7 @@ public class DbAdapter {
 	
 	private static final String CREATE_TABLE_FRIENDS = 
 			"create table friends (_id integer primary key autoincrement, " + 
-			"fbid text not null, name text not null, imageuri text not null);" ;
+			"fbid text not null, name text not null);" ;
 	
 	//create table string for transaction
 	
