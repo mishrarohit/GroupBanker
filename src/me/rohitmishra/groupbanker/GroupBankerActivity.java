@@ -44,8 +44,8 @@ public class GroupBankerActivity extends Activity {
 	
 	public static final String APP_ID = "228939630494756";
 	private LoginButton mLoginButton ;
-	private TextView mText;
-    private ImageView mUserPic;
+	//private TextView mText;
+    //private ImageView mUserPic;
 	private Handler mHandler;
     ProgressDialog dialog;
     String[] permissions = { "offline_access", "publish_stream", "user_photos", "publish_checkins",
@@ -91,7 +91,7 @@ public class GroupBankerActivity extends Activity {
             
             
             if (mFriends == false){
-            	Log.v(TAG, "in onCreate. mFriends is false. Calling getFrieds") ;
+            	Log.v(TAG, "in onCreate. mFriends is false. Calling getFriends") ;
             	getFriends();
             }
             else	{
@@ -104,8 +104,8 @@ public class GroupBankerActivity extends Activity {
         
 	    	setContentView(R.layout.main);
 	    	mLoginButton = (LoginButton) findViewById(R.id.login);
-	        mText = (TextView) GroupBankerActivity.this.findViewById(R.id.txt);
-	        mUserPic = (ImageView) GroupBankerActivity.this.findViewById(R.id.user_pic);
+	  //      mText = (TextView) GroupBankerActivity.this.findViewById(R.id.txt);
+	  //      mUserPic = (ImageView) GroupBankerActivity.this.findViewById(R.id.user_pic);
 	        
 	        /*
 	         * Source Tag: login_tag
@@ -120,8 +120,8 @@ public class GroupBankerActivity extends Activity {
         if(Utility.mFacebook != null) {
             if (!Utility.mFacebook.isSessionValid()) {
                 Log.v(TAG, "In onResume - isSessionValid is false") ;
-            	mText.setText("You are logged out! ");
-                mUserPic.setImageBitmap(null);
+        //    	mText.setText("You are logged out! ");
+        //        mUserPic.setImageBitmap(null);
             } else {
             	Log.v(TAG, "in onResume -- else part - isSessionValid is true");
                 Utility.mFacebook.extendAccessTokenIfNeeded(this, null);
@@ -217,8 +217,8 @@ public class GroupBankerActivity extends Activity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mText.setText("Welcome " + name + "!");
-                        mUserPic.setImageBitmap(Utility.getBitmap(picURL));
+          //              mText.setText("Welcome " + name + "!");
+          //              mUserPic.setImageBitmap(Utility.getBitmap(picURL));
                     }
                 });
 
@@ -249,7 +249,9 @@ public class GroupBankerActivity extends Activity {
 
         @Override
         public void onAuthFail(String error) {
-            mText.setText("Login Failed: " + error);
+            // mText.setText("Login Failed: " + error);
+        	Toast.makeText(getApplicationContext(), "Login Failed. Please try again.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -260,13 +262,17 @@ public class GroupBankerActivity extends Activity {
     public class FbAPIsLogoutListener implements LogoutListener {
         @Override
         public void onLogoutBegin() {
-            mText.setText("Logging out...");
+            //mText.setText("Logging out...");
+        	Toast.makeText(getApplicationContext(), "Logging out.",
+                    Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onLogoutFinish() {
-            mText.setText("You have logged out! ");
-            mUserPic.setImageBitmap(null);
+            // mText.setText("You have logged out! ");
+        	Toast.makeText(getApplicationContext(), "You have logged out.",
+                    Toast.LENGTH_LONG).show();
+           // mUserPic.setImageBitmap(null);
         }
     }
 
@@ -275,8 +281,10 @@ public class GroupBankerActivity extends Activity {
      */
     public void requestUserData() {
     	Log.v(TAG, "requestUserData called") ;
-        mText.setText("Fetching user name, profile pic...");
-        Bundle params = new Bundle();
+        //mText.setText("Fetching user name, profile pic...");
+    	Toast.makeText(getApplicationContext(), "Fetching user name, profile pic...",
+                Toast.LENGTH_LONG).show();
+    	Bundle params = new Bundle();
         params.putString("fields", "name, picture");
         Utility.mAsyncRunner.request("me", params, new UserRequestListener());
     }
