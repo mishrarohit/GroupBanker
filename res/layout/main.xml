@@ -15,7 +15,7 @@
      android:paddingTop="75dp"
      android:paddingLeft="80dp"
      android:paddingBottom="20dp"
-     android:textSize="45sp"
+     android:textSize="35sp"
      android:textStyle="bold"
      
        />
@@ -38,7 +38,7 @@
        android:layout_height="wrap_content"
        android:src="@drawable/login_button"
        android:layout_alignParentBottom="true"
-       android:paddingBottom="80dp"
+       android:paddingBottom="50dp"
        android:paddingLeft="20dp"
        android:paddingRight="20dp"
         />	  	
