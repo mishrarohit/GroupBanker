@@ -45,6 +45,8 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 				
 		Log.v("TAG", "in onCreate of FinishTransactionActivity");
 		
+		setContentView(R.layout.finishtransaction);
+		
 		mApplication = (GroupBankerApplication) getApplication();
 		
 		Intent intent = getIntent();
@@ -71,54 +73,14 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		
 		selectedIds = bundle.getStringArray("selectedIds");
 		
-		ScrollView scrollView = new ScrollView(this);
-		RelativeLayout relativeLayout = new RelativeLayout(this) ;
-		scrollView.addView(relativeLayout);
+		ScrollView scrollView = (ScrollView)findViewById(R.id.OverAllScrollView);
+		RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.innerRelativeLayout);
+				
+		mDescription = (TextView)findViewById(R.id.description);
+		mAmount = (TextView)findViewById(R.id.amount);
 		
-		
-		TextView formTitle = new TextView(this) ;
-		formTitle.setId(getId());
-		formTitle.setText(R.string.finish_question);
-		//formTitle.setPadding(20, 10, 10, 10);
-		formTitle.setTextSize(20);
-		formTitle.setGravity(50);
-		
-		
-		final RelativeLayout.LayoutParams paramsFormTitle = 
-			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		//paramsFormTitle.addRule(RelativeLayout.BELOW, mAmount.getId());
-		
-		relativeLayout.addView(formTitle, paramsFormTitle);
-		
-		mDescription = new TextView(this);
-		
-		mAmount = new TextView(this);
-		
-		mDescription.setText(description);
-		//mDescription.setPadding(20, 10, 10, 10);
-		mDescription.setTextSize(15);
-		mDescription.setId(mID);	// Set a random id for alignment 
-		
-		mAmount.setText("Amount = Rs. " + amount);
-		//mAmount.setPadding(20, 10, 10, 20);
-		mAmount.setTextSize(15);
-		mAmount.setId(getId());
-		
-		final RelativeLayout.LayoutParams paramsDescription = 
-			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsDescription.addRule(RelativeLayout.BELOW, formTitle.getId());
-		
-		
-		final RelativeLayout.LayoutParams paramsAmount = 
-			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsAmount.addRule(RelativeLayout.ALIGN_LEFT);
-		paramsAmount.addRule(RelativeLayout.BELOW, mDescription.getId());
-		
-		
-		relativeLayout.addView(mDescription, paramsDescription);
-		relativeLayout.addView(mAmount, paramsAmount);
-		
-		
+		mDescription.setText("Transaction Description:" + description);
+		mAmount.setText("Amount: Rs. " + amount);
 		
 		
 		/* Set up a separate textview and edittext for the user 
@@ -135,7 +97,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		final RelativeLayout.LayoutParams paramsUserName = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsUserName.addRule(RelativeLayout.ALIGN_LEFT);
-		paramsUserName.addRule(RelativeLayout.BELOW, formTitle.getId());
+		paramsUserName.addRule(RelativeLayout.BELOW, mAmount.getId());
 		relativeLayout.addView(userName, paramsUserName);
 		
 		
@@ -208,20 +170,12 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 			paid[i] = rowEditText ;
 		}
 		
-		Button btn = new Button(this);
-		btn.setText(R.string.finishTransaction);
-		btn.setId(getId());
+		Button btn = (Button)findViewById(R.id.finishTransaction);
 		btn.setOnClickListener(this);
-		final RelativeLayout.LayoutParams paramsButton = 
-				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsButton.addRule(RelativeLayout.BELOW, names[selectedIds.length-1].getId());
-		paramsButton.addRule(RelativeLayout.BELOW, paid[selectedIds.length-1].getId());
 		
-		relativeLayout.addView(btn, paramsButton);
 		mrelativeLayout = relativeLayout;
 		
-		this.setContentView(scrollView) ;		
-		
+			
 	}
 	
 	public int getId()	{
