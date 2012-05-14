@@ -77,6 +77,10 @@ public class HistoryActivity extends Activity{
 	    	amt.setText(c.getString(c.getColumnIndex(TransactionDbAdapter.KEY_AMOUNT)));
 	    	time.setText(c.getString(c.getColumnIndex(TransactionDbAdapter.KEY_TIME)));
 	    	
+	    	desc.setPadding(5, 5, 5, 5);
+	    	amt.setPadding(5, 5, 5, 5);
+	    	time.setPadding(5, 5, 5, 5);
+	    	
 	    	row.addView(desc);
 	    	row.addView(amt);
 	    	row.addView(time);

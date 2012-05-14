@@ -9,53 +9,45 @@
 	 <TextView android:text="@string/transHistory"
 	     style= "@style/heading" />
 	 
-	 <RelativeLayout android:id="@+id/ColumnHeading"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <TextView android:id="@+id/column1"
-            android:layout_width="90dip"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/description"
-            android:textStyle="normal|bold"
-            >
-        </TextView>
-
-        <TextView android:id="@+id/column2"
-            android:layout_width="70dip"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/amount"
-            android:textStyle="normal|bold"
-            android:layout_toRightOf="@+id/column1">
-        </TextView>
-        
-         <TextView android:id="@+id/column3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/dateTime"
-            android:textStyle="normal|bold"
-            android:layout_toRightOf="@+id/column2">
-        </TextView>
-    </RelativeLayout>
-    
+   
 	        
         <ScrollView android:id="@+id/ScrollView11"
             android:layout_width="fill_parent" android:layout_height="fill_parent"
             android:fillViewport="true">
 
-            <LinearLayout android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:layout_margin="5dip">
-
-                <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent" android:layout_height="fill_parent"
                     android:stretchColumns="0,1,2" android:id="@+id/history_table">
+                    
+                    <TableRow >
+                        <TextView android:id="@+id/column1"
+				            android:layout_height="wrap_content"
+				            android:text="@string/description"
+				            android:textStyle="normal|bold"
+				            android:padding="5dp"
+				            >
+				        </TextView>
+				
+				        <TextView android:id="@+id/column2"
+				            android:layout_height="wrap_content"
+				            android:text="@string/amount"
+				            android:textStyle="normal|bold"
+				            android:padding="5dp"
+				            >
+				        </TextView>
+				        
+				         <TextView android:id="@+id/column3"
+				            android:layout_height="wrap_content"
+				            android:layout_width="wrap_content"
+				            android:text="@string/dateTime"
+				            android:textStyle="normal|bold"
+				            android:padding="5dp"
+				            >
+				        </TextView>
+                    </TableRow>
                 </TableLayout>
                 
-            </LinearLayout>
-        </ScrollView>
+          </ScrollView>
 </LinearLayout>
 	 
 	 	     
