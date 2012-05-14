@@ -18,6 +18,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class FinishTransactionActivity extends Activity implements View.OnClickListener { 
 	private GroupBankerApplication mApplication ;
 	private static String TAG = "FinishTransactionActivity" ;
@@ -53,7 +54,12 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
+		try {
 		display.getSize(size);
+		} catch (java.lang.NoSuchMethodError ignore) { // Older device
+			size.x = display.getWidth();
+	        size.y = display.getHeight();
+		}
 		int width = size.x;
 		int height = size.y;
 		
