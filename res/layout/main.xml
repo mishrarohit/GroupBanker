@@ -25,6 +25,8 @@
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
        android:text="@string/login_msg"
+       android:paddingLeft="40dp"
+       android:paddingRight="40dp"
        android:layout_below="@id/app_logo"
        android:gravity="center_vertical|center_horizontal"
        />

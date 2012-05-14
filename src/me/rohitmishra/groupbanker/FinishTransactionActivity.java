@@ -5,9 +5,11 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +48,14 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		Log.v("TAG", "in onCreate of FinishTransactionActivity");
 		
 		setContentView(R.layout.finishtransaction);
+		
+		//getting the window display parameters
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		int height = size.y;
 		
 		mApplication = (GroupBankerApplication) getApplication();
 		
@@ -92,7 +102,9 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		userName.setId(getId());
 		userName.setText(mApplication.getUserName());
 		Log.v(TAG, "username value:" + mApplication.getUserName()) ;
-		userName.setPadding(10, 30, 60, 0);
+		userName.setPadding(10, 10, 10, 30);
+		userName.setWidth(width/2);
+		userName.setTextSize(17);
 		
 		final RelativeLayout.LayoutParams paramsUserName = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -104,7 +116,11 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		userPaid = new EditText(this);
 		userPaid.setId(getId());
 		userPaid.setInputType(InputType.TYPE_CLASS_NUMBER); //takes only number input
+		userPaid.setPadding(10, 10, 10, 10);
+		userPaid.setWidth(width/2);
 		userPaid.setHint(R.string.paidHint);
+		
+		
 		
 		//TODO Will be good if we can control the width without hardcoding
 		
@@ -126,12 +142,17 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		for (i = 0; i <  selectedIds.length; i++)	{ 
 			rowTextView = new TextView(this) ;
 			rowTextView.setId(getId());
+			//rowTextView.setMaxWidth(70);
+			rowTextView.setPadding(10, 10, 10, 30);
+			rowTextView.setTextSize(17);
+			rowTextView.setWidth(width/2);
 			
 			rowEditText = new EditText(this) ;
 			rowEditText.setId(getId());
 			rowEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
 			rowEditText.setHint(R.string.paidHint);
-			
+			rowEditText.setWidth(width/2);
+			rowEditText.setPadding(10, 10, 10, 10);
 			
 			
 			String name = mApplication.getFriendsDbAdapter().fetchFriendName(selectedIds[i]);

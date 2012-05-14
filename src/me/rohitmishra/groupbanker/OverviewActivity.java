@@ -35,6 +35,8 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
         Log.v("TAG", "In onCreate of OverviewActivity");
         mApplication = (GroupBankerApplication) getApplication();
         
+        setContentView(R.layout.currentoverview);
+        
 		Intent intent = getIntent();
 		bundle = intent.getExtras();
 		Log.v("TAG", "bundle:" + bundle);
@@ -54,20 +56,20 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
  
 		//generating dynamic view
 		
-        ScrollView scrollView = new ScrollView(this);
-		RelativeLayout relativeLayout = new RelativeLayout(this) ;
-		scrollView.addView(relativeLayout);
+        ScrollView scrollView = (ScrollView)findViewById(R.id.OuterScrollView);
+		RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.innerLayout);
 		
-		mDescription = new TextView(this);
-		mAmount = new TextView(this);
 		
-		mDescription.setText(description);
-		mDescription.setId(mID);	// Set a random id for alignment 
+		mDescription = (TextView)findViewById(R.id.overviewDesc);
+		mAmount = (TextView)findViewById(R.id.overviewAmt);
 		
-		mAmount.setText("Amount = Rs. " + amount);
-		mAmount.setId(getId());
+		mDescription.setText("Transaction Description:" + description);
+		//mDescription.setId(mID);	// Set a random id for alignment 
 		
-		final RelativeLayout.LayoutParams paramsDescription = 
+		mAmount.setText("Amount: Rs. " + amount);
+		//mAmount.setId(getId());
+		
+		/*final RelativeLayout.LayoutParams paramsDescription = 
 			new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsDescription.addRule(RelativeLayout.ALIGN_LEFT);
 				
@@ -78,7 +80,7 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
 		
 		
 		relativeLayout.addView(mDescription, paramsDescription);
-		relativeLayout.addView(mAmount, paramsAmount);
+		relativeLayout.addView(mAmount, paramsAmount);*/
 		
 		TextView rowTextView;
 		TextView[] entries = new TextView[idLength];
@@ -152,18 +154,10 @@ public class OverviewActivity extends Activity implements View.OnClickListener{
 				
 		}
 		
-		Button btn = new Button(this);
-		btn.setText(R.string.newTransaction);
-		btn.setId(getId());
+		Button btn = (Button)findViewById(R.id.refreshTransaction);
 		btn.setOnClickListener(this);
-		final RelativeLayout.LayoutParams paramsButton = 
-				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsButton.addRule(RelativeLayout.BELOW, entries[idLength-1].getId());
 		
-		
-		relativeLayout.addView(btn, paramsButton);
-		
-		this.setContentView(scrollView) ;
+		//this.setContentView(scrollView) ;
 		friendsHelper.close();
 		overviewHelper.close();
   }

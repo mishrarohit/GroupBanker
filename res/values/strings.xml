@@ -38,11 +38,12 @@
     <string name="description">Description</string>
     <string name="amount">Amount</string>
     <string name="dateTime">Date-Time</string>
-    <string name="paidHint">Enter an amount </string>
+    <string name="paidHint">Enter an Amount </string>
     <string name="finaloverview">Overview of your expenses</string>
     <string name="overviewempty">Woohoo ! Everything is squared up. </string>
     <string name="overviewarrow">Determines whether you have to pay or take payment from a friend</string>
     <string name="friendTransaction">Create friend-only transaction</string>
     <string name="login_msg">GroupBanker allows you to easily manage expenses with friends. No more awkward conversations about who owes who how much money. Signin with Facebook to get started.</string>
     <string name="profile_pic_desc">The profile pic of the application user. </string>
+    <string name="overviewTitle">Overview of Current Transaction</string>
 </resources>
