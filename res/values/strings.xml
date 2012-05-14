@@ -37,7 +37,7 @@
     <string name="transHistory">Transaction History</string>
     <string name="description">Description</string>
     <string name="amount">Amount</string>
-    <string name="dateTime">Date-Time</string>
+    <string name="dateTime">Date</string>
     <string name="paidHint">Enter an Amount </string>
     <string name="finaloverview">Overview of your expenses</string>
     <string name="overviewempty">Woohoo ! Everything is squared up. </string>

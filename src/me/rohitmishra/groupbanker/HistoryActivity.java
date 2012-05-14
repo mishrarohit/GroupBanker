@@ -3,6 +3,7 @@ package me.rohitmishra.groupbanker;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TableLayout;
@@ -54,7 +55,7 @@ public class HistoryActivity extends Activity{
 		if(!c.moveToFirst())	{
 			//cursor empty
 			TextView tv = new TextView(this);
-			tv.setText("This is the history tab");
+			tv.setText("No transaction records available. Add a transaction in the New Tab.");
 			setContentView(tv);
 		}
 		
@@ -75,7 +76,13 @@ public class HistoryActivity extends Activity{
 	    	
 	    	desc.setText(c.getString(c.getColumnIndex(TransactionDbAdapter.KEY_DESC)));
 	    	amt.setText(c.getString(c.getColumnIndex(TransactionDbAdapter.KEY_AMOUNT)));
-	    	time.setText(c.getString(c.getColumnIndex(TransactionDbAdapter.KEY_TIME)));
+	    	// time.setText(c.getString(c.getColumnIndex(TransactionDbAdapter.KEY_TIME)));
+	    	long timestamp =  c.getLong(c.getColumnIndexOrThrow(TransactionDbAdapter.KEY_TIME));
+	    	
+	    	CharSequence t = DateFormat.format("MMM dd", timestamp);
+	    	String timeString = t.toString();
+	    	
+	    	time.setText(timeString);
 	    	
 	    	desc.setPadding(5, 5, 5, 5);
 	    	amt.setPadding(5, 5, 5, 5);
