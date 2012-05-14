@@ -108,8 +108,10 @@ public class DirectTransactionActivity extends Activity implements OnClickListen
 		}
 		
 		if (flag == 1) {
-			Date d = new Date();
-			String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
+			//Date d = new Date();
+			//String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
+			Long timestamp = System.currentTimeMillis();
+			String formatted = timestamp.toString();
 			
 			int transID =(int)mTransactionHelper.createTransaction(fAmount, desc, formatted);
 

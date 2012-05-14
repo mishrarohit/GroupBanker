@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 // This class is for handling the database operations to store and fetch details for the transactions
@@ -141,9 +142,12 @@ private static final String TAG = "TransactionDbAdapter" ;
 	    	}
 	    	else {
 	    	Log.d(TAG, "fetchFriendName cursor count = " + c.getCount());
-	    	String time =  c.getString(c.getColumnIndexOrThrow(KEY_TIME));
+	    	long time =  c.getLong(c.getColumnIndexOrThrow(KEY_TIME));
+	    	
+	    	CharSequence t = DateFormat.format("MMM dd", time);
+	    	String timeString = t.toString();
 	    	c.close();
-	    	return time ;
+	    	return timeString ;
 	    	}
 	    }
 	 
