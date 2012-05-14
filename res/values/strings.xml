@@ -18,7 +18,7 @@
     <string name="friend">Friends Data</string>
     <string name="access_token_label">Current access token:</string>
     <string name="access_token_expires_label">Token expires at:</string>
-    <string name="fbprogress">Getting your friends from Facebook. This will take some time. Go play Angry Birds ! </string>
+    <string name="fbprogress">Getting your friends from Facebook. This will take some time. </string>
     <string name="hello_home">We are in  the Home Activity</string>
     <string name="overview">Overview of the all the dues and debts</string>
     <string name="new_transaction">Entering a new transaction or expense</string>
