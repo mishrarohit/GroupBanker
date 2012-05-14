@@ -239,8 +239,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		for(i=0; i<selectedIds.length; i++){
 					
 					floatVal = Float.valueOf(paid[i].getText().toString());
-					sum += floatVal
-					;
+					sum += floatVal;
 				}
 				
 		if (sum != amount1)
@@ -278,7 +277,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		detailsHelper.createDetails(lastId, "0", toPay, paid1);
 		
 		difference = paid1 - toPay;
-		userId[0] = "0";
+		userId[0] = "0"; 
 		diff[0] = difference;
 		
 		//entering the details for rest of the people involved in transaction
@@ -324,7 +323,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		Log.v(TAG, "the difference array: " );
 		for(i=0; i<= selectedIds.length; i++)	{
 					
-			Log.v(TAG, diff[i] + ",");
+			Log.v(TAG, diff	[i] + ",");
 		}
 		
 		 //sending the sorted array to update the overview table
@@ -370,6 +369,7 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 				if(diff[j] > diff[maxIndex])	{
 					maxIndex = j;					
 				}
+			}
 				
 				if(maxIndex != i)	{
 					temp1 = diff[i];
@@ -382,7 +382,6 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 				}
 			}
 		}
-	}
 	
 	//function definition for updateOverview
 	public void updateOverview(String userId[], float diff[], int transID)	{
