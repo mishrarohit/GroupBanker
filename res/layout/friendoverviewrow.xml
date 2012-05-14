@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:gravity="center_vertical"
+    android:padding="10dp"
    >
 <TextView
     android:id="@+id/timestamp"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:layout_weight="1"
+     />
 
 <TextView
     android:id="@+id/transactionName"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:layout_weight="1"
+     />
 
 <ImageView
     android:id="@+id/statusImage"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:contentDescription="@string/overviewarrow" />
+    android:contentDescription="@string/overviewarrow" 
+    android:layout_weight="1"
+    />
 
 <TextView
     android:id="@+id/amount"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:layout_weight="1"
+     />
 
 </LinearLayout>

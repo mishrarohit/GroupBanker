@@ -16,7 +16,9 @@
 		android:layout_height="wrap_content"
 		android:textOn="Pay"
 		android:textOff="Receive"
-		android:onClick="onToggleClicked"	/>
+		android:onClick="onToggleClicked"
+		style= "@style/buttonStyle"
+			/>
 	
 	<EditText
 	    android:id="@+id/desc"
@@ -38,5 +40,7 @@
 	    android:id="@+id/buttondone"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:text="@string/done" />
+	    android:text="@string/done"
+	    style= "@style/buttonStyle"
+	     />
 </LinearLayout>

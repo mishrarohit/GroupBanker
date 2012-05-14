@@ -256,8 +256,10 @@ public class FinishTransactionActivity extends Activity implements View.OnClickL
 		String[] userId = new String[selectedIds.length+1];
 		float[] diff = new float[selectedIds.length+1];
 		long[] finalIds;
-		Date d = new Date();
-		String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
+		Long timestamp = System.currentTimeMillis();
+		String formatted = timestamp.toString();
+		//Date d = new Date();
+		//String formatted = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss").format(d);
 		Log.v(TAG, "values going in the transaction table are:" + amount1 + "description" + description);
 		
 		//entering details in transaction database
