@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:gravity="center_vertical"
    >
+  
 <TextView
     android:id="@+id/friendName"
+    android:layout_height="wrap_content"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_weight="0.4"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:paddingLeft="15dp"
+     />
 
 <ImageView
     android:id="@+id/statusImage"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_weight="0.3"
+    android:layout_gravity="center"
     android:contentDescription="@string/overviewarrow" />
 
 <TextView
     android:id="@+id/amount"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content" 
+    android:layout_weight="0.3"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:paddingRight="15dp"
+    />
 
 </LinearLayout>
